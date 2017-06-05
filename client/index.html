@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+	<head>
+		<title>Calendar</title>
+		
+		<link rel='stylesheet' type='text/css' href='static/style.css'>
+		<script src='angular/angular.js'></script>
+		<script src='angular-route/angular-route.js'></script>
+		<script src='app.js'></script>
+		<script src='assets/FindService.js'></script>
+		<script src='assets/ValidService.js'></script>
+		<script src='assets/Block/BlockFactory.js'></script>
+		<script src='assets/Block/edit/EditBlock.js'></script>
+		<script src='assets/Block/index/IndexBlock.js'></script>
+		<script src='assets/Block/new/NewBlock.js'></script>
+		<script src='assets/Block/show/ShowBlock.js'></script>
+		<script src='assets/Event/EventFactory.js'></script>
+		<script src='assets/Event/edit/EditEvent.js'></script>
+		<script src='assets/Event/index/IndexEvent.js'></script>
+		<script src='assets/Event/new/NewEvent.js'></script>
+		<script src='assets/Event/show/ShowEvent.js'></script>
+		<script src='assets/Task/TaskFactory.js'></script>
+		<script src='assets/Task/edit/EditTask.js'></script>
+		<script src='assets/Task/index/IndexTask.js'></script>
+		<script src='assets/Task/new/NewTask.js'></script>
+		<script src='assets/Task/show/ShowTask.js'></script>
+	</head>
+	<body>
+		<h1 ng-if='false'>Error: Cannot Run Angular</h1>
+		<div ng-view><!-- Partials load here --></div>
+		<a href='#!/tasks'>Tasks</a>
+		<a href='#!/tasks/new'>New Task</a><br>
+		<a href='#!/events'>Events</a>
+		<a href='#!/events/new'>New Event</a><br>
+		<a href='#!/blocks'>Blocks</a>
+		<a href='#!/blocks/new'>New Block</a>
+	</body>
+</html>

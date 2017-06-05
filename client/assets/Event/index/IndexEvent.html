@@ -1,0 +1,16 @@
+<h1>Events Index</h1>
+<table>
+	<thead>
+		<th>Field</th>
+		<th>Actions</th>
+	</thead>
+	<tr ng-repeat='event in events'>
+		<td>{{event.field}}</td>
+		<td>
+			<a href='#!/events/show/{{event._id}}'>Show</a>
+			<a href='#!/events/edit/{{event._id}}'>Edit</a>
+			<a href='#' ng-click='delete(event._id)'>Delete</a>
+		</td>
+	</tr>
+</table>
+<button ng-click='print()'>Show All</button>

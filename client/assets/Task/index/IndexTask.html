@@ -1,0 +1,16 @@
+<h1>Tasks Index</h1>
+<table>
+	<thead>
+		<th>Field</th>
+		<th>Actions</th>
+	</thead>
+	<tr ng-repeat='task in tasks'>
+		<td>{{task.field}}</td>
+		<td>
+			<a href='#!/tasks/show/{{task._id}}'>Show</a>
+			<a href='#!/tasks/edit/{{task._id}}'>Edit</a>
+			<a href='#' ng-click='delete(task._id)'>Delete</a>
+		</td>
+	</tr>
+</table>
+<button ng-click='print()'>Show All</button>

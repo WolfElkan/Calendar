@@ -1,0 +1,16 @@
+<h1>Blocks Index</h1>
+<table>
+	<thead>
+		<th>Field</th>
+		<th>Actions</th>
+	</thead>
+	<tr ng-repeat='block in blocks'>
+		<td>{{block.field}}</td>
+		<td>
+			<a href='#!/blocks/show/{{block._id}}'>Show</a>
+			<a href='#!/blocks/edit/{{block._id}}'>Edit</a>
+			<a href='#' ng-click='delete(block._id)'>Delete</a>
+		</td>
+	</tr>
+</table>
+<button ng-click='print()'>Show All</button>
