@@ -1,3 +1,44 @@
 .error {
 	color: red;
 }
+
+html, body, div {
+	padding: 0;
+	margin: 0;
+}
+
+.view {
+	border: solid black 1px;
+}
+
+.calendar-box {
+	width: 95%;
+	padding: 0 2.5%;
+}
+
+.time-sep {
+	display: inline-block;
+}
+
+.day-head {
+	display: inline-block;
+	/*width: 14%;*/
+	text-align: center;
+}
+
+.day-head:nth-child(even) {
+	background-color: gray;
+}
+
+.calendar-scroll {
+	width: 100%;
+	/*border: solid black 1px;*/
+	height: 500px;
+	overflow-y: scroll;
+}
+
+svg {
+	/*border: solid black 1px;*/
+	background-color: #eee;
+}
+

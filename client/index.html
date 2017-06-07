@@ -6,6 +6,7 @@
 		<link rel='stylesheet' type='text/css' href='static/style.css'>
 		<script src='angular/angular.js'></script>
 		<script src='angular-route/angular-route.js'></script>
+		<script src='angular.ngcss.js'></script>
 		<script src='app.js'></script>
 		<script src='assets/FindService.js'></script>
 		<script src='assets/ValidService.js'></script>
@@ -27,12 +28,14 @@
 	</head>
 	<body>
 		<h1 ng-if='false'>Error: Cannot Run Angular</h1>
-		<div ng-view><!-- Partials load here --></div>
-		<a href='#!/tasks'>Tasks</a>
-		<a href='#!/tasks/new'>New Task</a><br>
-		<a href='#!/events'>Events</a>
-		<a href='#!/events/new'>New Event</a><br>
-		<a href='#!/blocks'>Blocks</a>
+		<div class="view" src="assets/Window/WindowTabs.html">
+			<a href='#!/tasks'>Task List</a>
+			<a href='#!/events'>Calendar</a>
+			<a href='#!/blocks'>Time Log</a>
+		</div>
+		<div class="view" ng-view><!-- Partials load here --></div>
+		<a href='#!/tasks/new'>New Task</a>
+		<a href='#!/events/new'>New Event</a>
 		<a href='#!/blocks/new'>New Block</a>
 	</body>
 </html>
