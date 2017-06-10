@@ -26,6 +26,15 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 		}
 	}
 
+	// factory.get = function(callback) {
+	// 	return callback({
+	// 		'desc' : 'Event'
+	// 		'start': 3.5
+	// 		'end'  : 3.75
+	// 		'color': '#ff0000'
+	// 	})
+	// }
+
 	factory.validations = []
 
 	factory.create = function(new_event) {

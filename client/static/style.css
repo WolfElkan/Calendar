@@ -16,13 +16,20 @@ html, body, div {
 	padding: 0 2.5%;
 }
 
+.calendar {
+	height: 1200px;
+	width: 100%;
+}
+
 .time-sep {
+	width: 48px;
 	display: inline-block;
+	text-align: center;
 }
 
 .day-head {
 	display: inline-block;
-	/*width: 14%;*/
+	width: calc(14.286% - 9px);
 	text-align: center;
 }
 
