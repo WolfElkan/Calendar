@@ -44,8 +44,25 @@ html, body, div {
 	overflow-y: scroll;
 }
 
-svg {
+.calendar {
 	/*border: solid black 1px;*/
 	background-color: #eee;
 }
 
+.new-event {
+	width: calc(14.286% - 9px);
+	height: 50px;
+	text-align: center;
+	line-height: 45px;
+	font-size: 26px;
+	color: rgba(255,255,255,0);
+}
+
+.plus {
+	vertical-align: middle;
+}
+
+.new-event:hover {
+	background-color: rgba(74,186,255,0.5);
+	color: rgba(16,136,255,0.6);
+}
