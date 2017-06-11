@@ -15,37 +15,35 @@ app.controller('IndexEvent',['$','$scope','$location','EventFactory',
 		return String(num) + 'px'
 	}
 
-	var timeW = 48
+	// console.log()
+
+	var timeW = 48 // Dependent change: style.css:32
 	var scrollBarW = 15
 
 	var day_head = document.getElementsByClassName('day-head')
 	var calendar = document.getElementsByClassName('calendar')
 	var time_sep = document.getElementsByClassName('time-sep')
 
+	var svg = `
+	<line x1="${timeW}" x2="${timeW}" y1="0" y2="1200" style="stroke:#888;stroke-width:1"/>
+	<polygon points="200,10 250,190 160,210" style="fill:lime;stroke:purple;stroke-width:1" ng-click="print()"/>
+	`
+
 	var rwd = function(events) {
 
 		var calW = window.innerWidth * 0.95 - scrollBarW 
 		var dayW = px((calW - timeW) / 7)
 
-		// day_head[0].style.width = dayW
-		// day_head[1].style.width = dayW
-		// day_head[2].style.width = dayW
-		// day_head[3].style.width = dayW
-		// day_head[4].style.width = dayW
-		// day_head[5].style.width = dayW
-		// day_head[6].style.width = dayW
-
-		// calendar[0].style.width = px(calW)
-
 		time_sep[0].style.width = px(timeW)
 		
-		// var canvas = new $svg
+		// var canvas = new $svg.Canvas()
 
-		// var svg = ''
+
 		// for (var i = 0; i < events.length; i++) {
 		// 	svg += events[i].svg()
 		// }
 		
+		document.getElementsByTagName('svg')[0].innerHTML = svg
 
 	}
 
