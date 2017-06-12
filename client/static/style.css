@@ -40,17 +40,17 @@ html, body, div {
 
 .time-bar {
 	height: 1440px; /* minute_height * 24 */
-	background-color: blue;
+	/*background-color: blue;*/
 }
 
 .midnight {
 	height: 30px; /* minute_height / 2 */
-	background-color: purple;
+	/*background-color: purple;*/
 }
 
 .hour {
 	height: 60px; /* minute_height */
-	background-color: orange;
+	/*background-color: orange;*/
 	text-align: right;
 	line-height: 60px; /* minute_height */
 	width: 100%;
@@ -60,22 +60,22 @@ html, body, div {
 	display: inline-block;
 	width: calc(14.286% - 12.14px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 */
 	text-align: center;
-	background-color: pink;
+	/*background-color: pink;*/
 }
 
 .day-head:nth-child(even) {
-	background-color: gray;
+	/*background-color: gray;*/
 }
 
 .day {
 	width: calc(14.286% - 10px); /* 100%/7 - time_bar_width/7 */
 	height: 100%;
 	display: inline-block;
-	background-color: red;
+	/*background-color: red;*/
 }
 
 .day:nth-child(odd) {
-	background-color: yellow;
+	/*background-color: yellow;*/
 }
 
 .calendar-scroll {
@@ -91,14 +91,14 @@ html, body, div {
 }
 
 .new-event {
-	width: calc(14.286% - 12.14px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 */
+	/*width: calc(14.286% - 12.14px);*/
 	height: 60px; /* minute_height */
 	text-align: center;
 	line-height: 55px; /* minute_height - 5px */
 	font-size: 26px; /* whatever looks nice */
 	color: rgba(255,255,255,0);
-	position: relative;
-	left: 70px; /* time_bar_width */
+	/*position: relative;*/
+	/*left: 70px;  time_bar_width */
 }
 
 .plus {
