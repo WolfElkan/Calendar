@@ -406,33 +406,42 @@ app.service('$',function() {
 	function StyleIterator(elements) {
 
 		for (var i = 0; i < style.length; i++) {
-			this.style[i] = function(value) {
-				for (var i = 0; i < elements.length; i++) {
-					elements[i].style[i] = value
+			this[style[i]] = function(value) {
+				for (var j = 0; j < elements.length; j++) {
+					elements[j][style[i]] = value
 				}
 			}
 		}
 
 	}
 
-	var service = {}
-
-	service.get = function(selector) {
+	return function(selector) {
+		var got
 		if (selector[0] == '#') {
-			// id
-		} else if (selector[0] == '.') {
-			// class
-		} else if (selector[0] == '<') {
-			// tag
+			got = document.getElementById(selector.substr(1))
+		} 
+		else if (selector[0] == '.') {
+			got = document.getElementsByClassName(selector.substr(1))
+		} 
+		else if (selector[0] == '<') {
+			if (selector.substr(-1) == '>') {
+				selector = selector.substr(0, selector.length - 1)
+			}
+			got = document.getElementsByTagName(selector.substr(1))
+		} 
+		else {
+			got = document.getElementsByName(selector.substr(1))
+		}
+
+		if (got.__proto__.constructor.name == 'HTMLCollection') {
+			if (got.length > 1) {
+				return new StyleIterator(got)
+			} else {
+				return got[0]
+			}
 		} else {
-			// name
+			return got
 		}
 	}
-
-	service.foo = function() {
-		console.log('bar')
-	}
-
-	return service
 	
 })

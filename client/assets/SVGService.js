@@ -19,7 +19,7 @@ app.service('$svg',function() {
 	}
 
 	service.TimeLine = function(canvas,time) {
-
+		
 	}
 
 	return service

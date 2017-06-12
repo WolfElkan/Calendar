@@ -17,7 +17,7 @@ html, body, div {
 }
 
 .calendar {
-	height: 1200px;
+	height: 1440px;
 	width: 100%;
 }
 
@@ -37,6 +37,11 @@ html, body, div {
 	background-color: gray;
 }
 
+.day {
+	width: calc(14.286% - 9px);
+	display: inline;
+}
+
 .calendar-scroll {
 	width: 100%;
 	/*border: solid black 1px;*/
@@ -51,11 +56,13 @@ html, body, div {
 
 .new-event {
 	width: calc(14.286% - 9px);
-	height: 50px;
+	height: 60px;
 	text-align: center;
-	line-height: 45px;
+	line-height: 55px;
 	font-size: 26px;
 	color: rgba(255,255,255,0);
+	position: relative;
+	left: 48px;
 }
 
 .plus {
