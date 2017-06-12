@@ -1,3 +1,7 @@
+* {
+	vertical-align: top;
+}
+
 .error {
 	color: red;
 }
@@ -11,26 +15,52 @@ html, body, div {
 	border: solid black 1px;
 }
 
+/* CALENDAR */
+/*  Variables
+	minute_height = 60py
+	time_bar_width = 70px
+	scroll_bar_width = 15px
+ */
+
 .calendar-box {
 	width: 95%;
 	padding: 0 2.5%;
 }
 
 .calendar {
-	height: 1440px;
+	height: 1440px; /* minute_height * 24 */
 	width: 100%;
 }
 
-.time-sep {
-	width: 48px;
+.time-sep, .time-bar {
+	width: 70px; /* time_bar_width */
 	display: inline-block;
 	text-align: center;
+}
+
+.time-bar {
+	height: 1440px; /* minute_height * 24 */
+	background-color: blue;
+}
+
+.midnight {
+	height: 30px; /* minute_height / 2 */
+	background-color: purple;
+}
+
+.hour {
+	height: 60px; /* minute_height */
+	background-color: orange;
+	text-align: right;
+	line-height: 60px; /* minute_height */
+	width: 100%;
 }
 
 .day-head {
 	display: inline-block;
-	width: calc(14.286% - 9px);
+	width: calc(14.286% - 12.14px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 */
 	text-align: center;
+	background-color: pink;
 }
 
 .day-head:nth-child(even) {
@@ -38,8 +68,14 @@ html, body, div {
 }
 
 .day {
-	width: calc(14.286% - 9px);
-	display: inline;
+	width: calc(14.286% - 10px); /* 100%/7 - time_bar_width/7 */
+	height: 100%;
+	display: inline-block;
+	background-color: red;
+}
+
+.day:nth-child(odd) {
+	background-color: yellow;
 }
 
 .calendar-scroll {
@@ -55,14 +91,14 @@ html, body, div {
 }
 
 .new-event {
-	width: calc(14.286% - 9px);
-	height: 60px;
+	width: calc(14.286% - 12.14px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 */
+	height: 60px; /* minute_height */
 	text-align: center;
-	line-height: 55px;
-	font-size: 26px;
+	line-height: 55px; /* minute_height - 5px */
+	font-size: 26px; /* whatever looks nice */
 	color: rgba(255,255,255,0);
 	position: relative;
-	left: 48px;
+	left: 70px; /* time_bar_width */
 }
 
 .plus {

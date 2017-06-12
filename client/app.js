@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute'])
+var app = angular.module('app', ['ngRoute','ngSanitize'])
 
 app.config(function($routeProvider) {
 	$routeProvider.when('/blocks/edit/:id',{

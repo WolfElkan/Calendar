@@ -1,5 +1,5 @@
-app.controller('IndexEvent',['$','$scope','$location','EventFactory',
-	                function( $ , $scope , $location , EventFactory) {
+app.controller('IndexEvent',['$','$sce','$scope','$location','EventFactory',
+	                function( $ , $sce , $scope , $location , EventFactory) {
 
 	EventFactory.get(function(content) {
 		var events = []
@@ -8,7 +8,11 @@ app.controller('IndexEvent',['$','$scope','$location','EventFactory',
 		}
 	})
 
-
+	$scope.events = `
+	<div class="time-bar">
+		<div class="midnight"></div>
+	</div>`
+	`<div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div>`
 
 	// $.foo()
 
