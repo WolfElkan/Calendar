@@ -9,12 +9,31 @@ app.controller('IndexEvent',['$','$sce','$scope','$location','EventFactory',
 	// })
 
 	var events = [
-	{
-		'title' : 'Morning Routine',
-		'color' : 'green',
-		'timeS' : 420,
-		'timeE' : 480,
-	}]
+		// {
+		// 	'title' : '10-11',
+		// 	'color' : 'yellow',
+		// 	'timeS' : 10*60,
+		// 	'timeE' : 11*60,
+		// },
+		// {
+		// 	'title' : '2-3',
+		// 	'color' : 'red',
+		// 	'timeS' : 2 * 60,
+		// 	'timeE' : 3 * 60,
+		// },
+		{
+			'title' : '7-9',
+			'color' : 'green',
+			'timeS' : 7 * 60,
+			'timeE' : 9 * 60,
+		},
+		{
+			'title' : '10:30-11:30',
+			'color' : 'blue',
+			'timeS' : 10*60 + 30,
+			'timeE' : 11*60 + 30,
+		},
+	]
 
 	function display(day,events) {
 		var str = ''
@@ -22,12 +41,13 @@ app.controller('IndexEvent',['$','$sce','$scope','$location','EventFactory',
 		for (var i = 0; i < events.length; i++) {
 			var event = new Event(events[i],off)
 			str += event.str
-			off += event.off
+			off = event.off
 		}
 		var html = str
 		html += day.innerHTML
 		day.innerHTML = html
-		day.getElementsByClassName('')
+		console.log(off/60)
+		day.$('.plus').bottom(off)
 	}
 
 	function Event(event,off=0) {
@@ -43,17 +63,19 @@ app.controller('IndexEvent',['$','$sce','$scope','$location','EventFactory',
 		this.off = off
 	}
 
+	var monday = $('.day').index(1)
+	display(monday,events)
+
 	// $scope.events = 
 	// $.foo()
 
 	// console.log()
 
 	// var calendar = document.getElementsByClassName('calendar')[0]
-	var monday = $('.day').index(1)
-	var pluses = monday.$('.plus')
-	pluses.bottom('60px')
+	// var pluses = monday.$('.plus')
+	// pluses.bottom(60)
 	// pluses.elements[0]['style']['bottom'] = '60px'
-	console.log(pluses.elements)
+	// console.log(pluses.elements)
 
 	$scope.delete = function(id) {
 		EventFactory.delete(id)

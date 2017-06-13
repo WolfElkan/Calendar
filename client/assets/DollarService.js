@@ -414,13 +414,17 @@ app.service('$',function() {
 
 		this.elements = elements
 
-		for (var s = 0; s < style.length; s++) {
-			this[style[s]] = function(value) {
-				for (var e = 0; e < elements.length; e++) {
-					elements[e]['style'][style[s]] = value
-					console.log(s)
-					console.log(elements[e]['style'][style[s]])
-				}
+		this.bottom = function(value) {
+			for (var e = 0; e < elements.length; e++) {
+				elements[e].style.bottom = String(value) + 'px'
+				console.log(elements[e].style.bottom)
+			}
+		}
+
+		this.top = function(value) {
+			for (var e = 0; e < elements.length; e++) {
+				elements[e].style.top = String(value) + 'px'
+				console.log(elements[e].style.top)
 			}
 		}
 
