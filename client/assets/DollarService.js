@@ -403,45 +403,70 @@ app.service('$',function() {
 		'zoom'
 	]
 
+	function add_sub_dollar(element) {
+		element.$ = function(selector) {
+			return service(selector,element)
+		}
+		return element
+	}
+
 	function StyleIterator(elements) {
 
-		for (var i = 0; i < style.length; i++) {
-			this[style[i]] = function(value) {
-				for (var j = 0; j < elements.length; j++) {
-					elements[j][style[i]] = value
+		this.elements = elements
+
+		for (var s = 0; s < style.length; s++) {
+			this[style[s]] = function(value) {
+				for (var e = 0; e < elements.length; e++) {
+					elements[e]['style'][style[s]] = value
+					console.log(s)
+					console.log(elements[e]['style'][style[s]])
 				}
 			}
 		}
 
+		this.index = function(i) {
+			return add_sub_dollar(elements[i])
+		}
+
+		this.$ = function(selector) {
+			var arr = []
+			for (var e = 0; e < elements.length; e++) {
+				arr.push(service(selector,elements[e]))
+			}
+			return arr
+		}
+
 	}
 
-	return function(selector) {
+	var service = function(selector,parent=document) {
 		var got
 		if (selector[0] == '#') {
-			got = document.getElementById(selector.substr(1))
+			got = parent.getElementById(selector.substr(1))
 		} 
 		else if (selector[0] == '.') {
-			got = document.getElementsByClassName(selector.substr(1))
+			got = parent.getElementsByClassName(selector.substr(1))
 		} 
 		else if (selector[0] == '<') {
 			if (selector.substr(-1) == '>') {
 				selector = selector.substr(0, selector.length - 1)
 			}
-			got = document.getElementsByTagName(selector.substr(1))
+			got = parent.getElementsByTagName(selector.substr(1))
 		} 
 		else {
-			got = document.getElementsByName(selector.substr(1))
+			got = parent.getElementsByName(selector.substr(1))
 		}
 
 		if (got.__proto__.constructor.name == 'HTMLCollection') {
 			if (got.length > 1) {
 				return new StyleIterator(got)
 			} else {
-				return got[0]
+				return add_sub_dollar(got[0])
 			}
 		} else {
-			return got
+			return add_sub_dollar(got)
 		}
 	}
+
+	return service
 	
 })

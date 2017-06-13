@@ -102,7 +102,7 @@ html, body, div {
 	/*width: calc(14% - 11px);*/
 	 /* 100%/7 - time_bar_width/7 - border */
 	height: 300px;
-	background-color: red;
+	background-color: yellow;
 	position: relative;
 }
 
@@ -111,7 +111,7 @@ html, body, div {
 	width: 100%;
 	height: 60px; /* minute_height */
 	text-align: center;
-	line-height: 59px; /* minute_height - 5px */
+	line-height: 57px; /* minute_height - 5px */
 	font-size: 26px;  /* whatever looks nice */
 	color: rgba(255,255,255,0);
 	position: relative;
