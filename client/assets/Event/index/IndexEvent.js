@@ -8,12 +8,7 @@ app.controller('IndexEvent',['$','$sce','$scope','$location','EventFactory',
 		}
 	})
 
-	$scope.events = `
-	<div class="time-bar">
-		<div class="midnight"></div>
-	</div>`
-	`<div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div>`
-
+	// $scope.events = 
 	// $.foo()
 
 	// console.log()
