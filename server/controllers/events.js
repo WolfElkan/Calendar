@@ -1,4 +1,3 @@
-
 var Event = require('../models/event.js')
 
 var events = {}

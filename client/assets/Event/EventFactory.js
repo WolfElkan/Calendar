@@ -2,8 +2,9 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 
 	var factory = {}
 	var content = []
+	var loaded_dates = []
 
-	factory.get = function(callback) {
+	factory.get = function(dateS,dateE,callback) {
 		if (typeof(callback) == 'function') {
 			if (content[0]) {
 				return callback(content)
@@ -25,15 +26,6 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 			throw new TypeError('Expected Function, got',callback.__proto__.constructor.name)
 		}
 	}
-
-	// factory.get = function(callback) {
-	// 	return callback({
-	// 		'desc' : 'Event'
-	// 		'start': 3.5
-	// 		'end'  : 3.75
-	// 		'color': '#ff0000'
-	// 	})
-	// }
 
 	factory.validations = []
 

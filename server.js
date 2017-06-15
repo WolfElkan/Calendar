@@ -12,4 +12,5 @@ require('./server/config/mongoose.js');
 require('./server/config/routes.js')(app);
 app.listen(port, function() {
 	console.log('Running at LOCALHOST: 127.0.0.1:'+port)
+	console.log(String(new Date))
 });

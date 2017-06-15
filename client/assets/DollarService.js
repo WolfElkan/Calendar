@@ -403,6 +403,151 @@ app.service('$',function() {
 		'zoom'
 	]
 
+	var html = [
+		'accessKey',
+		'align',
+		'assignedSlot',
+		'attributes',
+		'baseURI',
+		'childElementCount',
+		'childNodes',
+		'children',
+		'classList',
+		'className',
+		'clientHeight',
+		'clientLeft',
+		'clientTop',
+		'clientWidth',
+		'contentEditable',
+		'dataset',
+		'dir',
+		'draggable',
+		'firstChild',
+		'firstElementChild',
+		'hidden',
+		'id',
+		'innerHTML',
+		'innerText',
+		'isConnected',
+		'isContentEditable',
+		'lang',
+		'lastChild',
+		'lastElementChild',
+		'localName',
+		'namespaceURI',
+		'nextElementSibling',
+		'nextSibling',
+		'nodeName',
+		'nodeType',
+		'nodeValue',
+		'offsetHeight',
+		'offsetLeft',
+		'offsetParent',
+		'offsetTop',
+		'offsetWidth',
+		'onabort',
+		'onauxclick',
+		'onbeforecopy',
+		'onbeforecut',
+		'onbeforepaste',
+		'onblur',
+		'oncancel',
+		'oncanplay',
+		'oncanplaythrough',
+		'onchange',
+		'onclick',
+		'onclose',
+		'oncontextmenu',
+		'oncopy',
+		'oncuechange',
+		'oncut',
+		'ondblclick',
+		'ondrag',
+		'ondragend',
+		'ondragenter',
+		'ondragleave',
+		'ondragover',
+		'ondragstart',
+		'ondrop',
+		'ondurationchange',
+		'onemptied',
+		'onended',
+		'onerror',
+		'onfocus',
+		'ongotpointercapture',
+		'oninput',
+		'oninvalid',
+		'onkeydown',
+		'onkeypress',
+		'onkeyup',
+		'onload',
+		'onloadeddata',
+		'onloadedmetadata',
+		'onloadstart',
+		'onlostpointercapture',
+		'onmousedown',
+		'onmouseenter',
+		'onmouseleave',
+		'onmousemove',
+		'onmouseout',
+		'onmouseover',
+		'onmouseup',
+		'onmousewheel',
+		'onpaste',
+		'onpause',
+		'onplay',
+		'onplaying',
+		'onpointercancel',
+		'onpointerdown',
+		'onpointerenter',
+		'onpointerleave',
+		'onpointermove',
+		'onpointerout',
+		'onpointerover',
+		'onpointerup',
+		'onprogress',
+		'onratechange',
+		'onreset',
+		'onresize',
+		'onscroll',
+		'onsearch',
+		'onseeked',
+		'onseeking',
+		'onselect',
+		'onselectstart',
+		'onshow',
+		'onstalled',
+		'onsubmit',
+		'onsuspend',
+		'ontimeupdate',
+		'ontoggle',
+		'onvolumechange',
+		'onwaiting',
+		'onwebkitfullscreenchange',
+		'onwebkitfullscreenerror',
+		'onwheel',
+		'outerHTML',
+		'ownerDocument',
+		'parentElement',
+		'parentNode',
+		'prefix',
+		'previousElementSibling',
+		'previousSibling',
+		'scrollHeight',
+		'scrollLeft',
+		'scrollTop',
+		'scrollWidth',
+		'shadowRoot',
+		'slot',
+		'spellcheck',
+		'style',
+		'tabIndex',
+		'tagName',
+		'textContent',
+		'title',
+		'translate',
+	]
+
 	function add_sub_dollar(element) {
 		element.$ = function(selector) {
 			return service(selector,element)
@@ -417,14 +562,12 @@ app.service('$',function() {
 		this.bottom = function(value) {
 			for (var e = 0; e < elements.length; e++) {
 				elements[e].style.bottom = String(value) + 'px'
-				console.log(elements[e].style.bottom)
 			}
 		}
 
 		this.top = function(value) {
 			for (var e = 0; e < elements.length; e++) {
 				elements[e].style.top = String(value) + 'px'
-				console.log(elements[e].style.top)
 			}
 		}
 
@@ -464,10 +607,10 @@ app.service('$',function() {
 			if (got.length > 1) {
 				return new StyleIterator(got)
 			} else {
-				return add_sub_dollar(got[0])
+				return new add_sub_dollar(got[0])
 			}
 		} else {
-			return add_sub_dollar(got)
+			return new add_sub_dollar(got)
 		}
 	}
 

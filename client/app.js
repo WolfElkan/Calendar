@@ -17,6 +17,12 @@ app.config(function($routeProvider) {
 		templateUrl : 'assets/Block/show/ShowBlock.html',
 		controller  : 'ShowBlock'
 	})
+
+	$routeProvider.when('/calendar',{
+		templateUrl : 'assets/Calendar/week7.html',
+		controller  : 'Calendar'
+	})
+
 	$routeProvider.when('/events/edit/:id',{
 		templateUrl : 'assets/Event/edit/EditEvent.html',
 		controller  : 'EditEvent'
@@ -33,6 +39,7 @@ app.config(function($routeProvider) {
 		templateUrl : 'assets/Event/show/ShowEvent.html',
 		controller  : 'ShowEvent'
 	})
+
 	$routeProvider.when('/tasks/edit/:id',{
 		templateUrl : 'assets/Task/edit/EditTask.html',
 		controller  : 'EditTask'
@@ -50,6 +57,6 @@ app.config(function($routeProvider) {
 		controller  : 'ShowTask'
 	})
 	$routeProvider.otherwise({
-		redirectTo: '/tasks'
+		redirectTo: '/calendar'
 	})
 })

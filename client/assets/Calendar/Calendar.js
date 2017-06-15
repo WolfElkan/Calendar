@@ -1,5 +1,9 @@
-app.controller('IndexEvent',['$','$scope','$location','EventFactory',
-	                function( $ , $scope , $location , EventFactory) {
+app.controller('Calendar',['$','$scope','$routeParams','$location','EventFactory',
+function                  ( $ , $scope , $routeParams , $location , EventFactory) {
+
+	var start = new Date($routeParams.year,$routeParams.month,$routeParams.date)
+
+	console.log(start)
 
 	EventFactory.get(function(content) {
 		// var events = []
@@ -10,10 +14,28 @@ app.controller('IndexEvent',['$','$scope','$location','EventFactory',
 		display(monday,content)
 	})
 
-	$scope.sun = 11
+	$scope.days = [
+	start.setDate(start.getDate()),
+	start.setDate(start.getDate()+1),
+	start.setDate(start.getDate()+1),
+	start.setDate(start.getDate()+1),
+	start.setDate(start.getDate()+1),
+	start.setDate(start.getDate()+1),
+	start.setDate(start.getDate()+1)]
 
 	$('.calendar-scroll').scrollTop = 530 // 8:50 AM to 5:10 PM
 	$('#new-event').style.display = 'none'
+
+	var time_bar_innerHTML = '<div class="midnight"></div>'
+	for (var h = 1; h <= 11; h++) {
+		time_bar_innerHTML += `<div class="hour">${h}:00 AM</div>`
+	}
+	time_bar_innerHTML += `<div class="hour">12:00 PM</div>`
+	for (var h = 1; h <= 11; h++) {
+		time_bar_innerHTML += `<div class="hour">${h}:00 PM</div>`
+	}
+	
+	$('.time-bar').innerHTML = time_bar_innerHTML
 
 	function display(day,events) {
 		var str = ''
@@ -43,7 +65,7 @@ app.controller('IndexEvent',['$','$scope','$location','EventFactory',
 		this.off = off
 	}
 
-	$scope.new = function function_name() {
+	$scope.new = function() {
 		$('#new-event').style.display = 'inline-block'
 	}
 

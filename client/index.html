@@ -11,27 +11,55 @@
 		<script src='assets/FindService.js'></script>
 		<script src='assets/ValidService.js'></script>
 		<script src='assets/DollarService.js'></script>
+
 		<script src='assets/Block/BlockFactory.js'></script>
 		<script src='assets/Block/edit/EditBlock.js'></script>
 		<script src='assets/Block/index/IndexBlock.js'></script>
 		<script src='assets/Block/new/NewBlock.js'></script>
 		<script src='assets/Block/show/ShowBlock.js'></script>
+		<script src='assets/Block/show/ShowBlock.js'></script>
+
+		<script src='assets/Calendar/Calendar.js'></script>
+		<script src='assets/Calendar/CalendarRedirect.js'></script>
+
 		<script src='assets/Event/EventFactory.js'></script>
 		<script src='assets/Event/edit/EditEvent.js'></script>
 		<script src='assets/Event/index/IndexEvent.js'></script>
 		<script src='assets/Event/new/NewEvent.js'></script>
 		<script src='assets/Event/show/ShowEvent.js'></script>
+
 		<script src='assets/Task/TaskFactory.js'></script>
 		<script src='assets/Task/edit/EditTask.js'></script>
 		<script src='assets/Task/index/IndexTask.js'></script>
 		<script src='assets/Task/new/NewTask.js'></script>
 		<script src='assets/Task/show/ShowTask.js'></script>
+
+		<script type="text/javascript">
+			
+			function hex(dec,places=NaN) {
+				var result = ''
+				var digits = '0123456789abcdef'
+				var x = 0
+				while (places * 0 == 0 ? places-- : dec >= 1) {
+					dec = Math.floor(dec)
+					result = digits[dec%16] + result
+					dec /= 2**4
+					x++
+					if (x > 100) {
+						return Infinity
+					}
+				}
+				return result
+			}
+
+		</script>
+
 	</head>
 	<body>
 		<h1 ng-if='false'>Error: Cannot Run Angular</h1>
 		<div class="view" src="assets/Window/WindowTabs.html">
 			<a href='#!/tasks'>Task List</a>
-			<a href='#!/events'>Calendar</a>
+			<a href='#!/calendar'>Calendar</a>
 			<a href='#!/blocks'>Time Log</a>
 		</div>
 		<div class="view" ng-view><!-- Partials load here --></div>
