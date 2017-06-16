@@ -16,9 +16,12 @@ events.show = function(request, response) {
 }
 
 events.create = function(request,response) {
+	console.log('create event')
 	new_event = new Event({
-		field   : request.body.field,
-		temp_id : request.body.temp_id,
+		title : request.body.title,
+		color : request.body.color,
+		start : request.body.start,
+		end   : request.body.end
 	})
 	new_event.save(function(error,result) {
 		if (error) {

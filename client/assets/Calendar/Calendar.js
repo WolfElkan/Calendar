@@ -108,6 +108,7 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		$scope.new_event.dateE = undefined
 		$scope.new_event.timeE = undefined
 		console.log($scope.new_event)
+		EventFactory.create($scope.new_event)
 		$('#new-event').style.display = 'none'
 	}
 

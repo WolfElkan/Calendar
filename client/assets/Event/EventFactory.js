@@ -30,7 +30,9 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 	factory.validations = []
 
 	factory.create = function(new_event) {
-		if ($valid.ate(factory,new_event).valid) {
+		var obj = $valid.ate(factory,new_event)
+		console.log(obj)
+		if (obj.valid) {
 			var promise = $http.post('/events',new_event)
 			promise.then(function(returned) {
 				if (returned.status == 200) {
