@@ -3,9 +3,9 @@ var Schema = mongoose.Schema
 
 var EventSchema = new Schema({
 	title : String,
-	color : Number, // min=0, max=2**24-1
-	timeS : Date,
-	timeE : Date,
+	color : String,
+	start : Date,
+	end   : Date,
 },{	timestamps: { 
 		createdAt: 'created_at', 
 		updatedAt: 'updated_at',

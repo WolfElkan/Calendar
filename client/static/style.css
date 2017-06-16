@@ -76,7 +76,7 @@ html, body, div {
 
 .day-head {
 	display: inline-block;
-	width: calc(14.286% - 12.14px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 */
+	width: calc(14.286% - 11px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 */
 	text-align: center;
 	/*background-color: pink;*/
 }

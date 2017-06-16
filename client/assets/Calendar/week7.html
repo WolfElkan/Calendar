@@ -1,192 +1,21 @@
-<h1>{{days[0] | date : "MMMM yyyy"}}</h1>
+<h1>{{days[0].head | date : "MMMM yyyy"}}</h1>
 <div class="calendar-box">
 	<div class="time-sep">Time
-	</div><div class="day-head">{{days[0] | date : "EEE d"}}
-	</div><div class="day-head">{{days[1] | date : "EEE d"}}
-	</div><div class="day-head">{{days[2] | date : "EEE d"}}
-	</div><div class="day-head">{{days[3] | date : "EEE d"}}
-	</div><div class="day-head">{{days[4] | date : "EEE d"}}
-	</div><div class="day-head">{{days[5] | date : "EEE d"}}
-	</div><div class="day-head">{{days[6] | date : "EEE d"}}
+	</div><div class="day-head">{{days[0].head | date : "EEE d"}}
+	</div><div class="day-head">{{days[1].head | date : "EEE d"}}
+	</div><div class="day-head">{{days[2].head | date : "EEE d"}}
+	</div><div class="day-head">{{days[3].head | date : "EEE d"}}
+	</div><div class="day-head">{{days[4].head | date : "EEE d"}}
+	</div><div class="day-head">{{days[5].head | date : "EEE d"}}
+	</div><div class="day-head">{{days[6].head | date : "EEE d"}}
 	</div>
 	<div class="calendar-scroll">
 		<div class="calendar">
 			<div class="time-bar">
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>		
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>				
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>				
-			</div><div class="day">
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>
-				<div class="plus" ng-click="new()">+</div>				
+				<div class="midnight"></div>
+				<div class="hour" ng-repeat="hour in hours | limitTo : 23 : 1">{{hour | date : "h:mm a"}}</div>
+			</div><div class="day" ng-repeat="day in days">
+				<div class="plus" ng-repeat="hour in day.hours" ng-click="new(hour,hour)">+</div>
 			</div>
 		</div>
 	</div>
@@ -202,15 +31,21 @@
 		<tr>
 			<td>Start:</td>
 			<td>
-			<input type="time" ng-model="new_event.timeS">
-			<input type="date" ng-model="new_event.dateS">
+				<input type="time" ng-model="new_event.timeS">
+				<input type="date" ng-model="new_event.dateS">
 			</td>
 		</tr>
 		<tr>
 			<td>End:</td>
 			<td>
-			<input type="time" ng-model="new_event.timeE">
-			<input type="date" ng-model="new_event.dateE">
+				<input type="time" ng-model="new_event.timeE">
+				<input type="date" ng-model="new_event.dateE">
+			</td>
+		</tr>
+		<tr>
+			<td>Color:</td>
+			<td>
+				<input type="color" ng-model="new_event.color">
 			</td>
 		</tr>
 	</table>
