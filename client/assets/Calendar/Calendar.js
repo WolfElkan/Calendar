@@ -1,6 +1,12 @@
 app.controller('Calendar',['$','$scope','$routeParams','$location','$date','EventFactory',
 function                  ( $ , $scope , $routeParams , $location , $date , EventFactory) {
 
+	function print(obj) {
+		for (key in obj) {
+			console.log(key,':',obj)
+		}
+	}
+
 	function go(date) {
 		date = new Date(date)
 		var url = 'calendar?view=week'
@@ -23,13 +29,17 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		$routeParams.date  != start.getDate()  ||
 		$routeParams.month != start.getMonth() ||
 		$routeParams.year  != start.getFullYear() ) ) {
-		console.log(25)
 		go(start)
 	}
 
 	$scope.hours = []
 	for (var h = 0; h < 24; h++) {
 		$scope.hours.push($date.move(start,0,0,0,h))
+	}
+
+	function Hour(time) {
+		this.time = time
+		this.print = function() {}
 	}
 
 	function Day(initial,plus_days) {
@@ -40,10 +50,26 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 			this.hours.push($date.combine(midnight,$scope.hours[h]))
 		}
 		this.events = []
+		this.add_event = function() {} // Sort events by start time
 		this.print = function(element) {
-			var html = 'floop'
+			var divs = []
+			var e = 0, h = 0
+			// // If one of them is depleted, do the other one
+			// while (e < this.events.length || h < this.hours.length) {
+			// 	if (this.events[e].start <= this.hours[h]) {
+			// 		divs.push(this.events[e++])
+			// 	} else {
+			// 		divs.push(this.hours[h++])
+			// 	}
+			// }
+			var html = ''
+			// var html = this.head + '<br>&#x1f984;'
 			element.innerHTML = html
 		}
+	}
+
+	function Event(data) {
+		// body...
 	}
 
 	$scope.days = []
@@ -51,14 +77,13 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		$scope.days.push(new Day(start,d))
 	}
 
-	function print(obj) {
-		for (key in obj) {
-			console.log(key,':',obj)
-		}
+	for (var i = 0; i < $scope.days.length; i++) {
+		$scope.days[i]
 	}
 
 	$('.day').every(function(day,i) {
-		day.innerHTML = i + '&#x1f984;'
+		// day.innerHTML = i + '&#x1f984;'
+		$scope.days[i].print(day)
 	})
 
 	$scope.new_event = {
@@ -124,6 +149,10 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 
 	$scope.cancel = function() {
 		$('#new-event').style.display = 'none'
+	}
+
+	$scope.xMonth = function() {
+		return $scope.days[0].head.getMonth() != $scope.days[6].head.getMonth()
 	}
 
 	$scope.delete = function(id) {

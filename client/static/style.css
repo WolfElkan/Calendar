@@ -90,8 +90,10 @@ h2 {
 	/*background-color: pink;*/
 }
 
-.day-head:nth-child(even) {
-	/*background-color: gray;*/
+.today {
+	background-color: green;
+	color: white;
+	font-weight: bold;
 }
 
 .weekday {
