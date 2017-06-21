@@ -38,9 +38,9 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 			'color' : '#facade',
 		}
 
-		$('#calendar-scroll').it(function(element) {
-			element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		})
+		// $('#calendar-scroll').it(function(element) {
+		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		// })
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
@@ -51,11 +51,31 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		// 	$scope.days[i].print(day)
 		// })
 
+	// Events
+
+		EventFactory.get(function(events) {
+			var offset = {px:0}
+			var html = ''
+			for (var i = 0; i < events.length; i++) {
+				html += events[i].div(start,offset)
+				console.log(offset.px)
+			}
+			console.log(html)
+			$('.day').index(0,function(day) {
+				day.innerHTML = html
+			})
+		})
+
 // Constructors
 
 	function Hour(time) {
 		this.time = time
-		this.print = function() {}
+		this.div = function(date,offset,scale=1) {
+			scale /= 3600000
+			date = $date.midnight(date)
+			offset += scale*60
+			return `<div class="plus" ng-click="new(${this.time})">+</div>`
+		}
 	}
 
 	function Day(initial,plus_days) {
@@ -86,8 +106,8 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 
 	function EventGraphic(event,off=0) {
 		var title = event.title
-		var timeS = event.timeS /= 1
-		var timeE = event.timeE /= 1
+		var timeS = event.timeS
+		var timeE = event.timeE
 		var color = event.color
 		var top = timeS - off
 		var height = timeE - timeS
@@ -148,6 +168,10 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
 		})
+		$scope.new_event = {
+			'title' : '',
+			'color' : '#ffffff',
+		}
 	}
 
 	$scope.cancel = function() {

@@ -11,6 +11,23 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		this.end   = $date.parse(data.end)
 		// this.created_at = $date.parse(data.created_at)
 		// this.updated_at = $date.parse(data.updated_at)
+		this.div = function(date,offset,scale=1) {
+			scale /= 60000
+			date = $date.midnight(date)
+			var top = (Number(this.start) - Number(date)) * scale - offset.px
+			var height = (this.end - this.start) * scale
+			var str = '<div class="event" style="top: '
+			str += top
+			str += 'px; height: '
+			str += height
+			str += 'px; background-color: '
+			str += this.color
+			str += '">'
+			str += this.title
+			str += '</div>\n'
+			offset.px += height
+			return str
+		}
 	}
 
 	factory.get = function(callback) {
