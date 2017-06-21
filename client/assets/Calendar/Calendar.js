@@ -1,7 +1,31 @@
 app.controller('Calendar',['$','$scope','$routeParams','$location','$date','EventFactory',
 function                  ( $ , $scope , $routeParams , $location , $date , EventFactory) {
 
+	function go(date) {
+		date = new Date(date)
+		var url = 'calendar?view=week'
+		url += '&year=' + date.getFullYear()
+		url += '&month='+ date.getMonth()
+		url += '&date=' + date.getDate()
+		$location.url(url)
+	}
+
+	if (!$routeParams.year) {
+		var now = new Date()
+		now -= now.getDay() * 86400000
+		now = new Date(now)
+		go(now)
+	}
+
 	var start = new Date($routeParams.year,$routeParams.month,$routeParams.date)
+
+	if (Number(start) && (
+		$routeParams.date  != start.getDate()  ||
+		$routeParams.month != start.getMonth() ||
+		$routeParams.year  != start.getFullYear() ) ) {
+		console.log(25)
+		go(start)
+	}
 
 	$scope.hours = []
 	for (var h = 0; h < 24; h++) {
@@ -104,6 +128,10 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 
 	$scope.delete = function(id) {
 		EventFactory.delete(id)
+	}
+
+	$scope.nav = function(dDays) {
+		go($date.move(start,0,0,dDays))
 	}
 
 	$scope.print = function() {

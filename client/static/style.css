@@ -22,9 +22,18 @@ html, body, div {
 	scroll_bar_width = 15px
  */
 
- h1, h2 {
- 	text-align: center;
+ .nav {
+ 	display: inline;
+ 	font-size: 30px;
  }
+
+h1 {
+	display: inline;
+}
+
+h2 {
+	text-align: center;
+}
 
 .calendar-box {
 	width: 95%;

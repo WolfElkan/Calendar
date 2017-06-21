@@ -1,4 +1,8 @@
-<h1>{{days[0].head | date : "MMMM yyyy"}}</h1>
+<center>
+	<button class="nav" ng-click="nav(-7)">&lt;</button>
+	<h1>{{days[0].head | date : "MMMM yyyy"}}</h1>
+	<button class="nav" ng-click="nav(7)">&gt;</button>
+</center>
 <div class="calendar-box">
 	<div class="time-sep">Time
 	</div><div class="day-head">{{days[0].head | date : "EEE d"}}
