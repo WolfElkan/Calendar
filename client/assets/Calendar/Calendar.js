@@ -47,9 +47,13 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 	// 	console.log(x)
 	// })
 
-	$('.day',function(element) {
-		console.log(element)
+	$('.day').every(function(day,i) {
+		day.innerHTML = i
 	})
+
+	// $('.day').every(function(element) {
+	// 	console.log(element)
+	// })
 
 	document.getElementsByClassName('day').onload = function() {
 	}
@@ -69,11 +73,11 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		'color' : '#facade',
 	}
 
-	$('#calendar-scroll',function(element) {
+	$('#calendar-scroll').it(function(element) {
 		element.scrollTop = 530 // 8:50 AM to 5:10 PM
 	})
 
-	$('#new-event',function(element) {
+	$('#new-event').it(function(element) {
 		element.style.display = 'none'
 	})
 

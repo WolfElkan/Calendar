@@ -585,11 +585,25 @@ app.service('$',function() {
 
 	// }
 
-	// function Iterator(elements) {
-	// 	// body...
-	// }
+	function Iterator(elements) {
+		this.every = function(callback) {
+			setTimeout(function() {
+				for (var i = 0; i < elements.length; i++) {
+					callback(elements[i],i)
+				}
+			}, 0);
+		}
+		this.index = function(i,callback) {
+			setTimeout(function() {
+				callback(elements[i])
+			}, 0);
+		}
+		this.it = function(callback) {
+			callback(elements)
+		}
+	}
 
-	var service = function(selector,callback,parent=document) {
+	var service = function(selector,callback,index,parent=document) {
 		var got
 		if (selector[0] == '#') {
 			got = parent.getElementById(selector.substr(1))
@@ -606,15 +620,12 @@ app.service('$',function() {
 		else {
 			got = parent.getElementsByName(selector.substr(1))
 		}
-		if (got.__proto__.constructor.name == 'HTMLCollection') {
-			setTimeout(function() {
-				for (var i = 0; i < got.length; i++) {
-					callback(got[i])
-				}
-			}, 0);
-		} else {
-			return callback(got)
-		}
+		// if (got.__proto__.constructor.name == 'HTMLCollection') {
+			return new Iterator(got)
+		// } else {
+			// return new Iterator(got)
+		// }
+		// return 627
 	}
 
 	return service
