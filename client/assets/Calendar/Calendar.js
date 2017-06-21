@@ -1,41 +1,57 @@
 app.controller('Calendar',['$','$scope','$routeParams','$location','$date','EventFactory',
 function                  ( $ , $scope , $routeParams , $location , $date , EventFactory) {
 
-	function print(obj) {
-		for (key in obj) {
-			console.log(key,':',obj)
+// On Load
+
+	// Navigation
+
+		if (!$routeParams.year) {
+			var now = new Date()
+			now -= now.getDay() * 86400000
+			now = new Date(now)
+			go(now)
 		}
-	}
 
-	function go(date) {
-		date = new Date(date)
-		var url = 'calendar?view=week'
-		url += '&year=' + date.getFullYear()
-		url += '&month='+ date.getMonth()
-		url += '&date=' + date.getDate()
-		$location.url(url)
-	}
+		var start = new Date($routeParams.year,$routeParams.month,$routeParams.date)
 
-	if (!$routeParams.year) {
-		var now = new Date()
-		now -= now.getDay() * 86400000
-		now = new Date(now)
-		go(now)
-	}
+		if (Number(start) && (
+			$routeParams.date  != start.getDate()  ||
+			$routeParams.month != start.getMonth() ||
+			$routeParams.year  != start.getFullYear() ) ) {
+			go(start)
+		}
 
-	var start = new Date($routeParams.year,$routeParams.month,$routeParams.date)
+	// Content
 
-	if (Number(start) && (
-		$routeParams.date  != start.getDate()  ||
-		$routeParams.month != start.getMonth() ||
-		$routeParams.year  != start.getFullYear() ) ) {
-		go(start)
-	}
+		$scope.hours = []
+		for (var h = 0; h < 24; h++) {
+			$scope.hours.push($date.move(start,0,0,0,h))
+		}
 
-	$scope.hours = []
-	for (var h = 0; h < 24; h++) {
-		$scope.hours.push($date.move(start,0,0,0,h))
-	}
+		$scope.days = []
+		for (var d = 0; d < 7; d++) {
+			$scope.days.push(new Day(start,d))
+		}
+
+		$scope.new_event = {
+			'title' : '',
+			'color' : '#facade',
+		}
+
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		})
+
+		$('#new-event').it(function(element) {
+			element.style.display = 'none'
+		})
+
+		// $('.day').every(function(day,i) {
+		// 	// day.innerHTML = i + '&#x1f984;'
+		// 	$scope.days[i].print(day)
+		// })
+
+// Constructors
 
 	function Hour(time) {
 		this.time = time
@@ -68,36 +84,28 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		}
 	}
 
-	function Event(data) {
-		// body...
+	function EventGraphic(event,off=0) {
+		var title = event.title
+		var timeS = event.timeS /= 1
+		var timeE = event.timeE /= 1
+		var color = event.color
+		var top = timeS - off
+		var height = timeE - timeS
+		this.str = `<div class="event" style="top: ${top}px; height: ${height}px; background-color: ${color}">${title}</div>`
+		off += height
+		this.off = off
 	}
 
-	$scope.days = []
-	for (var d = 0; d < 7; d++) {
-		$scope.days.push(new Day(start,d))
+// Support Functions
+
+	function go(date) {
+		date = new Date(date)
+		var url = 'calendar?view=week'
+		url += '&year=' + date.getFullYear()
+		url += '&month='+ date.getMonth()
+		url += '&date=' + date.getDate()
+		$location.url(url)
 	}
-
-	for (var i = 0; i < $scope.days.length; i++) {
-		$scope.days[i]
-	}
-
-	$('.day').every(function(day,i) {
-		// day.innerHTML = i + '&#x1f984;'
-		$scope.days[i].print(day)
-	})
-
-	$scope.new_event = {
-		'title' : '',
-		'color' : '#facade',
-	}
-
-	$('#calendar-scroll').it(function(element) {
-		element.scrollTop = 530 // 8:50 AM to 5:10 PM
-	})
-
-	$('#new-event').it(function(element) {
-		element.style.display = 'none'
-	})
 
 	function display(day,events) {
 		var str = ''
@@ -114,25 +122,16 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		day.$('.plus').bottom(off)
 	}
 
-	function EventGraphic(event,off=0) {
-		var title = event.title
-		var timeS = event.timeS /= 1
-		var timeE = event.timeE /= 1
-		var color = event.color
-		var top = timeS - off
-		var height = timeE - timeS
-		this.str = `
-<div class="event" style="top: ${top}px; height: ${height}px; background-color: ${color}">${title}</div>`
-		off += height
-		this.off = off
-	}
+// Scope Functions
 
 	$scope.new = function(hour) {
 		$scope.new_event.dateE = new Date(Number(hour) + 3600000)
 		$scope.new_event.timeE = new Date(Number(hour) + 3600000)
 		$scope.new_event.dateS = hour
 		$scope.new_event.timeS = hour
-		$('#new-event').style.display = 'inline-block'
+		$('#new-event').it(function(element) {
+			element.style.display = 'inline-block'
+		})
 	}
 
 	$scope.create = function() {
@@ -142,17 +141,27 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		$scope.new_event.timeS = undefined
 		$scope.new_event.dateE = undefined
 		$scope.new_event.timeE = undefined
-		console.log($scope.new_event)
-		EventFactory.create($scope.new_event)
-		$('#new-event').style.display = 'none'
+		// console.log($scope.new_event)
+		EventFactory.create($scope.new_event,function(created_event) {
+			console.log(created_event)
+		})
+		$('#new-event').it(function(element) {
+			element.style.display = 'none'
+		})
 	}
 
 	$scope.cancel = function() {
-		$('#new-event').style.display = 'none'
+		$('#new-event').it(function(element) {
+			element.style.display = 'none'
+		})
 	}
 
 	$scope.xMonth = function() {
 		return $scope.days[0].head.getMonth() != $scope.days[6].head.getMonth()
+	}
+
+	$scope.isToday = function(day) {
+		return Number($date.midnight(day.head)) == Number($date.midnight(new Date()))
 	}
 
 	$scope.delete = function(id) {
@@ -164,10 +173,18 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 	}
 
 	$scope.print = function() {
-		console.log('load')
-		var x = $('.day')
-		console.log(x)
-		// EventFactory.print()
+		// console.log('load')
+		// var x = $('.day')
+		// console.log(x)
+		EventFactory.print()
+	}
+
+// Development Functions
+
+	function print(obj) {
+		for (key in obj) {
+			console.log(key,':',obj)
+		}
 	}
 
 }])

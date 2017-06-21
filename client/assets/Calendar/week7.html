@@ -1,19 +1,17 @@
 <a href="/">Today</a>
 <center>
-	<button class="nav" ng-click="nav(-7)">&lt;</button>
+	<button class="nav" ng-click="nav(-7)">&laquo;</button>
+	<button class="nav" ng-click="nav(-1)">&lsaquo;</button>
 	<h1 ng-if="!xMonth()">{{days[0].head | date : "MMMM yyyy"}}</h1>
 	<h1 ng-if="xMonth()">{{days[0].head | date : "MMM"}}/{{days[6].head | date : "MMM yyyy"}}</h1>
-	<button class="nav" ng-click="nav(7)">&gt;</button>
+	<button class="nav" ng-click="nav(1)">&rsaquo;</button>
+	<button class="nav" ng-click="nav(7)">&raquo;</button>
 </center>
 <div class="calendar-box">
-	<div class="time-sep">Time
-	</div><div class="day-head">{{days[0].head | date : "EEE d"}}
-	</div><div class="day-head">{{days[1].head | date : "EEE d"}}
-	</div><div class="day-head">{{days[2].head | date : "EEE d"}}
-	</div><div class="day-head">{{days[3].head | date : "EEE d"}}
-	</div><div class="day-head">{{days[4].head | date : "EEE d"}}
-	</div><div class="day-head">{{days[5].head | date : "EEE d"}}
-	</div><div class="day-head">{{days[6].head | date : "EEE d"}}
+	<div class="time-sep">Time</div>
+	<div class="day-head" ng-repeat="day in days">
+		<div ng-if="!isToday(day)">{{day.head | date : "EEE d"}}</div>
+		<div ng-if="isToday(day)" class="today">{{day.head | date : "EEE d"}}</div>
 	</div>
 	<div id="calendar-scroll">
 		<div class="calendar">
@@ -21,7 +19,7 @@
 				<div class="midnight"></div>
 				<div class="hour" ng-repeat="hour in hours | limitTo : 23 : 1">{{hour | date : "h:mm a"}}</div>
 			</div><div class="day" ng-repeat="day in days">
-				<div class="plus" ng-repeat="hour in day.hours" ng-click="new(hour,hour)">+</div>
+				<div class="plus" ng-repeat="hour in day.hours" ng-click="new(hour)">+</div>
 			</div>
 		</div>
 	</div>

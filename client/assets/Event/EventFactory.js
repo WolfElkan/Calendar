@@ -1,8 +1,17 @@
-app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid) {
+app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$find,$valid,$date) {
 
 	var factory = {}
 	var content = []
 	var loaded_dates = []
+
+	function Event(data) {
+		this.title = data.title
+		this.color = data.color
+		this.start = $date.parse(data.start)
+		this.end   = $date.parse(data.end)
+		// this.created_at = $date.parse(data.created_at)
+		// this.updated_at = $date.parse(data.updated_at)
+	}
 
 	factory.get = function(callback) {
 		if (typeof(callback) == 'function') {
@@ -10,7 +19,9 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 				return callback(content)
 			} else {
 				$http.get('/events').then(function(returned) {
-					content = returned.data.events
+					for (var i = 0; i < returned.data.events.length; i++) {
+						content.push(new Event(returned.data.events[i]))
+					}
 					return callback(content)
 				})
 			}
@@ -29,14 +40,18 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 
 	factory.validations = []
 
-	factory.create = function(new_event) {
+	factory.create = function(new_event,callback) {
 		var obj = $valid.ate(factory,new_event)
-		console.log(obj)
+		// console.log(obj)
 		if (obj.valid) {
 			var promise = $http.post('/events',new_event)
 			promise.then(function(returned) {
 				if (returned.status == 200) {
-					content.push(returned.data)
+					var created_event = new Event(returned.data)
+					content.push(created_event)
+					if (callback) {
+						callback(created_event)
+					}
 				} else {
 					console.log(returned)
 				}
