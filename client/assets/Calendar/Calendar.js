@@ -3,40 +3,58 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 
 	var start = new Date($routeParams.year,$routeParams.month,$routeParams.date)
 
-	console.log(start)
+	// console.log(start)
 
-	EventFactory.get(function(content) {
-		// var events = []
-		// for (var i = 0; i < content.length; i++) {
-		// 	events.push(new svg.Event(content[i]))
-		// }
-		var monday = $('.day').index(1)
-		display(monday,content)
-	})
+	// EventFactory.get(function(content) {
+	// 	var monday = $('.day').index(1)
+	// 	display(monday,content)
+	// })
 
-	$scope.hours = [new Date(start)]
-	for (var h = 1; h < 24; h++) {
-		$scope.hours.push(start.setHours(start.getHours()+1))
+	$scope.hours = []
+	for (var h = 0; h < 24; h++) {
+		$scope.hours.push($date.move(start,0,0,0,h))
 	}
 
-	// $scope.days = []
-	// var day = start
-	// for (var d = 0; d < 7; d++) {
-	// 	$scope.days.push({'head':new Date(day)})
-	// 	day += 86400000
-	// }
-
-	$scope.days = [{'head':new Date(start.setDate(start.getDate())),'hours':[]}]
-	for (var d = 1; d < 7; d++) {
-		$scope.days.push({'head':new Date(start.setDate(start.getDate()+1)),'hours':[]})
-	}
-	for (var d = 0; d < $scope.days.length; d++) {
-		$scope.days[d]
+	function Day(initial,plus_days) {
+		var midnight = $date.move($date.midnight(initial),0,0,plus_days)
+		this.head = midnight
+		this.hours = []
 		for (var h = 0; h < $scope.hours.length; h++) {
-			$scope.days[d].hours[h] = $date.combine($scope.days[d].head,$scope.hours[h])
+			this.hours.push($date.combine(midnight,$scope.hours[h]))
+		}
+		this.events = []
+		this.print = function(element) {
+			var html = 'floop'
+			element.innerHTML = html
 		}
 	}
-	console.log($scope.days)
+
+	$scope.days = []
+	for (var d = 0; d < 7; d++) {
+		$scope.days.push(new Day(start,d))
+	}
+
+	function print(obj) {
+		for (key in obj) {
+			console.log(key,':',obj)
+		}
+	}
+
+	// $scope.$on('$viewContentLoaded',function() {
+	// 	console.log('load')
+	// 	var x = $('.day')
+	// 	// console.log(document.getElementsByClassName('day'))
+	// 	console.log(x)
+	// })
+
+	$('.day',function(element) {
+		console.log(element)
+	})
+
+	document.getElementsByClassName('day').onload = function() {
+	}
+
+	// console.log($scope.days)
 
 	// $scope.times = []
 	// for (var d = 0; d < $scope.days.length; d++) {
@@ -51,24 +69,28 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		'color' : '#facade',
 	}
 
-	$('.calendar-scroll').scrollTop = 530 // 8:50 AM to 5:10 PM
+	$('#calendar-scroll',function(element) {
+		element.scrollTop = 530 // 8:50 AM to 5:10 PM
+	})
 
-	$('#new-event').style.display = 'none'
+	$('#new-event',function(element) {
+		element.style.display = 'none'
+	})
 
-	var time_bar_innerHTML = '<div class="midnight"></div>'
-	for (var h = 1; h <= 11; h++) {
-		time_bar_innerHTML += `<div class="hour">${h}:00 AM</div>`
-	}
-	time_bar_innerHTML += `<div class="hour">12:00 PM</div>`
-	for (var h = 1; h <= 11; h++) {
-		time_bar_innerHTML += `<div class="hour">${h}:00 PM</div>`
-	}
+	// var time_bar_innerHTML = '<div class="midnight"></div>'
+	// for (var h = 1; h <= 11; h++) {
+	// 	time_bar_innerHTML += `<div class="hour">${h}:00 AM</div>`
+	// }
+	// time_bar_innerHTML += `<div class="hour">12:00 PM</div>`
+	// for (var h = 1; h <= 11; h++) {
+	// 	time_bar_innerHTML += `<div class="hour">${h}:00 PM</div>`
+	// }
 
 	function display(day,events) {
 		var str = ''
 		var off = 0
 		for (var i = 0; i < events.length; i++) {
-			var event = new Event(events[i],off)
+			var event = new EventGraphic(events[i],off)
 			str += event.str
 			off = event.off
 		}
@@ -79,7 +101,7 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		day.$('.plus').bottom(off)
 	}
 
-	function Event(event,off=0) {
+	function EventGraphic(event,off=0) {
 		var title = event.title
 		var timeS = event.timeS /= 1
 		var timeE = event.timeE /= 1
@@ -121,7 +143,256 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 	}
 
 	$scope.print = function() {
-		EventFactory.print()
+		console.log('load')
+		var x = $('.day')
+		console.log(x)
+		// EventFactory.print()
 	}
 
 }])
+
+var day = document.getElementsByClassName('day')
+
+day.onabort = function() {
+	console.log('abort')
+}
+day.onauxclick = function() {
+	console.log('auxclick')
+}
+day.onbeforecopy = function() {
+	console.log('beforecopy')
+}
+day.onbeforecut = function() {
+	console.log('beforecut')
+}
+day.onbeforepaste = function() {
+	console.log('beforepaste')
+}
+day.onblur = function() {
+	console.log('blur')
+}
+day.oncancel = function() {
+	console.log('cancel')
+}
+day.oncanplay = function() {
+	console.log('canplay')
+}
+day.oncanplaythrough = function() {
+	console.log('canplaythrough')
+}
+day.onchange = function() {
+	console.log('change')
+}
+day.onclick = function() {
+	console.log('click')
+}
+day.onclose = function() {
+	console.log('close')
+}
+day.oncontextmenu = function() {
+	console.log('contextmenu')
+}
+day.oncopy = function() {
+	console.log('copy')
+}
+day.oncuechange = function() {
+	console.log('cuechange')
+}
+day.oncut = function() {
+	console.log('cut')
+}
+day.ondblclick = function() {
+	console.log('dblclick')
+}
+day.ondrag = function() {
+	console.log('drag')
+}
+day.ondragend = function() {
+	console.log('dragend')
+}
+day.ondragenter = function() {
+	console.log('dragenter')
+}
+day.ondragleave = function() {
+	console.log('dragleave')
+}
+day.ondragover = function() {
+	console.log('dragover')
+}
+day.ondragstart = function() {
+	console.log('dragstart')
+}
+day.ondrop = function() {
+	console.log('drop')
+}
+day.ondurationchange = function() {
+	console.log('durationchange')
+}
+day.onemptied = function() {
+	console.log('emptied')
+}
+day.onended = function() {
+	console.log('ended')
+}
+day.onerror = function() {
+	console.log('error')
+}
+day.onfocus = function() {
+	console.log('focus')
+}
+day.ongotpointercapture = function() {
+	console.log('gotpointercapture')
+}
+day.oninput = function() {
+	console.log('input')
+}
+day.oninvalid = function() {
+	console.log('invalid')
+}
+day.onkeydown = function() {
+	console.log('keydown')
+}
+day.onkeypress = function() {
+	console.log('keypress')
+}
+day.onkeyup = function() {
+	console.log('keyup')
+}
+day.onload = function() {
+	console.log('load')
+}
+day.onloadeddata = function() {
+	console.log('loadeddata')
+}
+day.onloadedmetadata = function() {
+	console.log('loadedmetadata')
+}
+day.onloadstart = function() {
+	console.log('loadstart')
+}
+day.onlostpointercapture = function() {
+	console.log('lostpointercapture')
+}
+day.onmousedown = function() {
+	console.log('mousedown')
+}
+day.onmouseenter = function() {
+	console.log('mouseenter')
+}
+day.onmouseleave = function() {
+	console.log('mouseleave')
+}
+day.onmousemove = function() {
+	console.log('mousemove')
+}
+day.onmouseout = function() {
+	console.log('mouseout')
+}
+day.onmouseover = function() {
+	console.log('mouseover')
+}
+day.onmouseup = function() {
+	console.log('mouseup')
+}
+day.onmousewheel = function() {
+	console.log('mousewheel')
+}
+day.onpaste = function() {
+	console.log('paste')
+}
+day.onpause = function() {
+	console.log('pause')
+}
+day.onplay = function() {
+	console.log('play')
+}
+day.onplaying = function() {
+	console.log('playing')
+}
+day.onpointercancel = function() {
+	console.log('pointercancel')
+}
+day.onpointerdown = function() {
+	console.log('pointerdown')
+}
+day.onpointerenter = function() {
+	console.log('pointerenter')
+}
+day.onpointerleave = function() {
+	console.log('pointerleave')
+}
+day.onpointermove = function() {
+	console.log('pointermove')
+}
+day.onpointerout = function() {
+	console.log('pointerout')
+}
+day.onpointerover = function() {
+	console.log('pointerover')
+}
+day.onpointerup = function() {
+	console.log('pointerup')
+}
+day.onprogress = function() {
+	console.log('progress')
+}
+day.onratechange = function() {
+	console.log('ratechange')
+}
+day.onreset = function() {
+	console.log('reset')
+}
+day.onresize = function() {
+	console.log('resize')
+}
+day.onscroll = function() {
+	console.log('scroll')
+}
+day.onsearch = function() {
+	console.log('search')
+}
+day.onseeked = function() {
+	console.log('seeked')
+}
+day.onseeking = function() {
+	console.log('seeking')
+}
+day.onselect = function() {
+	console.log('select')
+}
+day.onselectstart = function() {
+	console.log('selectstart')
+}
+day.onshow = function() {
+	console.log('show')
+}
+day.onstalled = function() {
+	console.log('stalled')
+}
+day.onsubmit = function() {
+	console.log('submit')
+}
+day.onsuspend = function() {
+	console.log('suspend')
+}
+day.ontimeupdate = function() {
+	console.log('timeupdate')
+}
+day.ontoggle = function() {
+	console.log('toggle')
+}
+day.onvolumechange = function() {
+	console.log('volumechange')
+}
+day.onwaiting = function() {
+	console.log('waiting')
+}
+day.onwebkitfullscreenchange = function() {
+	console.log('webkitfullscreenchange')
+}
+day.onwebkitfullscreenerror = function() {
+	console.log('webkitfullscreenerror')
+}
+day.onwheel = function() {
+	console.log('wheel')
+}

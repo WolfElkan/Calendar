@@ -4,7 +4,7 @@ app.factory('EventFactory',['$http','$find','$valid',function($http,$find,$valid
 	var content = []
 	var loaded_dates = []
 
-	factory.get = function(dateS,dateE,callback) {
+	factory.get = function(callback) {
 		if (typeof(callback) == 'function') {
 			if (content[0]) {
 				return callback(content)
