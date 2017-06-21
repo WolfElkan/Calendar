@@ -34,11 +34,8 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 	}
 
 	$('.day').every(function(day,i) {
-		day.innerHTML = i
+		day.innerHTML = i + '&#x1f984;'
 	})
-
-	document.getElementsByClassName('day').onload = function() {
-	}
 
 	$scope.new_event = {
 		'title' : '',
