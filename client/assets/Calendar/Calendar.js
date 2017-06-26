@@ -1,5 +1,5 @@
-app.controller('Calendar',['$','$scope','$routeParams','$location','$date','EventFactory',
-function                  ( $ , $scope , $routeParams , $location , $date , EventFactory) {
+app.controller('Calendar',['$','$scope','$routeParams','$location','$compile','$date','EventFactory',
+function                  ( $ , $scope , $routeParams , $location , $compile , $date , EventFactory) {
 
 // On Load
 
@@ -33,34 +33,50 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 			$scope.days.push(new Day(start,d))
 		}
 
+		console.log($scope.days)
+
 		$scope.new_event = {
 			'title' : '',
 			'color' : '#facade',
 		}
 
-		// $('#calendar-scroll').it(function(element) {
-		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		// })
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		})
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
 		})
 
-		// $('.day').every(function(day,i) {
-		// 	// day.innerHTML = i + '&#x1f984;'
-		// 	$scope.days[i].print(day)
+		// $('.day').index(0,function(element,i) {
+			// console.log(element)
 		// })
+
+		// $('.plus').every(function(element,i) {
+
+		// })
+
+		$('.day').every(function(element,off_by_one) {
+			// element.innerHTML = 'Goodbye' + i
+			var i = off_by_one - 1
+			// console.log($scope.days[i])
+			if (off_by_one) {
+				$scope.days[i].print(element)
+			}
+			// element.innerHTML = i + '&#x1f984;'
+		})
 
 	// Events
 
 		EventFactory.get(function(events) {
 			var offset = {px:0}
 			var html = ''
-			for (var i = 0; i < events.length; i++) {
-				html += events[i].div(start,offset)
-				console.log(offset.px)
+			// for (var i = 0; i < events.length; i++) {
+			// 	html += events[i].div(start,offset)
+			// }
+			for (var i = 0; i < $scope.hours.length; i++) {
+				$scope.hours[i]
 			}
-			console.log(html)
 			$('.day').index(0,function(day) {
 				day.innerHTML = html
 			})
@@ -71,10 +87,20 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 	function Hour(time) {
 		this.time = time
 		this.div = function(date,offset,scale=1) {
-			scale /= 3600000
+			var height = 60 * scale
+			scale /= 60000
 			date = $date.midnight(date)
-			offset += scale*60
-			return `<div class="plus" ng-click="new(${this.time})">+</div>`
+			var top = (Number(this.time) - Number(date)) * scale - offset.px
+			// console.log()
+			offset.px += height
+			var html = '<div class="plus" style="top: '
+			html += top
+			html += 'px; height: '
+			html += height
+			html += 'px" ng-click="new('
+			html += Number(this.time)
+			html += ')">+</div>\n'
+			return html
 		}
 	}
 
@@ -83,7 +109,7 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		this.head = midnight
 		this.hours = []
 		for (var h = 0; h < $scope.hours.length; h++) {
-			this.hours.push($date.combine(midnight,$scope.hours[h]))
+			this.hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
 		}
 		this.events = []
 		this.add_event = function() {} // Sort events by start time
@@ -99,21 +125,14 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 			// 	}
 			// }
 			var html = ''
+			var offset = {'px':0}
+			for (var i = 0; i < this.hours.length; i++) {
+				html += this.hours[i].div(midnight,offset)
+			}
+			// console.log(html)
 			// var html = this.head + '<br>&#x1f984;'
 			element.innerHTML = html
 		}
-	}
-
-	function EventGraphic(event,off=0) {
-		var title = event.title
-		var timeS = event.timeS
-		var timeE = event.timeE
-		var color = event.color
-		var top = timeS - off
-		var height = timeE - timeS
-		this.str = `<div class="event" style="top: ${top}px; height: ${height}px; background-color: ${color}">${title}</div>`
-		off += height
-		this.off = off
 	}
 
 // Support Functions
@@ -145,6 +164,7 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 // Scope Functions
 
 	$scope.new = function(hour) {
+		hour = hour.time
 		$scope.new_event.dateE = new Date(Number(hour) + 3600000)
 		$scope.new_event.timeE = new Date(Number(hour) + 3600000)
 		$scope.new_event.dateS = hour
@@ -209,6 +229,14 @@ function                  ( $ , $scope , $routeParams , $location , $date , Even
 		for (key in obj) {
 			console.log(key,':',obj)
 		}
+	}
+
+	$scope.range = function(lo,hi,inc=1) {
+		var result = []
+		for (var i = lo; i <= hi; i+=inc) {
+			result.push(i)
+		}
+		return result
 	}
 
 }])

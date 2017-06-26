@@ -55,7 +55,7 @@ h2 {
 }
 
 .time-sep {
-	width: 70px; /* time_bar_width */
+	width: 65px; /* time_bar_width */
 	display: inline-block;
 	text-align: center;
 }
@@ -84,13 +84,20 @@ h2 {
 }
 
 .day-head {
+	/*background-color: red;*/
 	display: inline-block;
-	width: calc(14.286% - 13.5px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 eyeballed */
+	width: calc(14.286% - 12px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 eyeballed */
 	text-align: center;
 	/*background-color: pink;*/
 }
-
+/*
+.day-head:nth-child(even) {
+	background-color: blue;
+}
+*/
 .today {
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
 	background-color: green;
 	color: white;
 	font-weight: bold;

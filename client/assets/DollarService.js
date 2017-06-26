@@ -1,3 +1,4 @@
+// A jQuery approximation built from scratch
 app.service('$',function() {
 
 	function Iterator(elements) {

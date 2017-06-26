@@ -16,17 +16,17 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 			date = $date.midnight(date)
 			var top = (Number(this.start) - Number(date)) * scale - offset.px
 			var height = (this.end - this.start) * scale
-			var str = '<div class="event" style="top: '
-			str += top
-			str += 'px; height: '
-			str += height
-			str += 'px; background-color: '
-			str += this.color
-			str += '">'
-			str += this.title
-			str += '</div>\n'
+			var html = '<div class="event" style="top: '
+			html += top
+			html += 'px; height: '
+			html += height
+			html += 'px; background-color: '
+			html += this.color
+			html += '">'
+			html += this.title
+			html += '</div>\n'
 			offset.px += height
-			return str
+			return html
 		}
 	}
 

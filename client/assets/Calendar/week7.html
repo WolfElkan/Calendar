@@ -1,4 +1,5 @@
 <a href="/">Today</a>
+<!-- <div class="day" ng-repeat="num in range(1,7)">Hello {{num}}</div> -->
 <center>
 	<button class="nav" ng-click="nav(-7)">&laquo;</button>
 	<button class="nav" ng-click="nav(-1)">&lsaquo;</button>
@@ -18,8 +19,9 @@
 			<div class="time-bar">
 				<div class="midnight"></div>
 				<div class="hour" ng-repeat="hour in hours | limitTo : 23 : 1">{{hour | date : "h:mm a"}}</div>
+			</div><div class="day" style="display: none;">
+				This is a workaround for now, but I need to figure out why I can't select the first element.
 			</div><div class="day" ng-repeat="day in days">
-				<div class="plus" ng-repeat="hour in day.hours" ng-click="new(hour)">+</div>
 			</div>
 		</div>
 	</div>
