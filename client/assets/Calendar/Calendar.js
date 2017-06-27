@@ -40,9 +40,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			'color' : '#facade',
 		}
 
-		$('#calendar-scroll').it(function(element) {
-			element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		})
+		// $('#calendar-scroll').it(function(element) {
+		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		// })
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
@@ -93,14 +93,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			var top = (Number(this.time) - Number(date)) * scale - offset.px
 			// console.log()
 			offset.px += height
-			var html = '<div class="plus" style="top: '
-			html += top
-			html += 'px; height: '
-			html += height
-			html += 'px" ng-click="new('
-			html += Number(this.time)
-			html += ')">+</div>\n'
-			return html
+			return '<div plus time="12345">Hello</div>'
+			// return `<div plus top="${top}" height="${height}" time="${Number(this.time)}"></div>`
+			// return `<div class="plus" style="top: ${top}px; height: ${height}px" ng-click="new(${Number(this.time)})">+</div>\n`
 		}
 	}
 
@@ -200,8 +195,14 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		})
 	}
 
-	$scope.xMonth = function() {
-		return $scope.days[0].head.getMonth() != $scope.days[6].head.getMonth()
+	$scope.cross = function(option) {
+		if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
+			return option == 0
+		} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
+			return option == 1
+		} else {
+			return option == 2
+		}
 	}
 
 	$scope.isToday = function(day) {
@@ -220,7 +221,10 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		// console.log('load')
 		// var x = $('.day')
 		// console.log(x)
-		EventFactory.print()
+
+		// EventFactory.print()
+
+
 	}
 
 // Development Functions

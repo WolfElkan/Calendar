@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute','ngSanitize'])
+var app = angular.module('app', ['ngRoute','ngSanitize','app.directives._plus'])
 
 app.config(function($routeProvider) {
 	$routeProvider.when('/blocks/edit/:id',{
@@ -21,23 +21,6 @@ app.config(function($routeProvider) {
 	$routeProvider.when('/calendar',{
 		templateUrl : 'assets/Calendar/week7.html',
 		controller  : 'Calendar'
-	})
-
-	$routeProvider.when('/events/edit/:id',{
-		templateUrl : 'assets/Event/edit/EditEvent.html',
-		controller  : 'EditEvent'
-	})
-	$routeProvider.when('/events',{
-		templateUrl : 'assets/Event/index/IndexEvent.html',
-		controller  : 'IndexEvent'
-	})
-	$routeProvider.when('/events/new',{
-		templateUrl : 'assets/Event/new/NewEvent.html',
-		controller  : 'NewEvent'
-	})
-	$routeProvider.when('/events/show/:id',{
-		templateUrl : 'assets/Event/show/ShowEvent.html',
-		controller  : 'ShowEvent'
 	})
 
 	$routeProvider.when('/tasks/edit/:id',{
