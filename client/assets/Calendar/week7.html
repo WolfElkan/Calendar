@@ -23,6 +23,7 @@
 			</div><div class="day" style="display: none;">
 				This is a workaround for now, but I need to figure out why I can't select the first element.
 			</div><div class="day" ng-repeat="day in days">
+				<div class="plus" ng-click="new(block)" ng-repeat="block in day.html()">+</div>
 			</div>
 		</div>
 	</div>
@@ -60,5 +61,4 @@
 	<button ng-click='cancel()'>Cancel</button>
 </div>
 <!-- </center> -->
-<button ng-click='print()'>Show All</button>
-<div plus time="12345">Hello</div>
+<button ng-click='print()'>Print</button>

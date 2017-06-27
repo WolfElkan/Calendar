@@ -56,15 +56,15 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 		// })
 
-		$('.day').every(function(element,off_by_one) {
-			// element.innerHTML = 'Goodbye' + i
-			var i = off_by_one - 1
-			// console.log($scope.days[i])
-			if (off_by_one) {
-				$scope.days[i].print(element)
-			}
-			// element.innerHTML = i + '&#x1f984;'
-		})
+		// $('.day').every(function(element,off_by_one) {
+		// 	// element.innerHTML = 'Goodbye' + i
+		// 	var i = off_by_one - 1
+		// 	// console.log($scope.days[i])
+		// 	if (off_by_one) {
+		// 		$scope.days[i].print(element)
+		// 	}
+		// 	// element.innerHTML = i + '&#x1f984;'
+		// })
 
 	// Events
 
@@ -95,39 +95,65 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			offset.px += height
 			return '<div plus time="12345">Hello</div>'
 			// return `<div plus top="${top}" height="${height}" time="${Number(this.time)}"></div>`
-			// return `<div class="plus" style="top: ${top}px; height: ${height}px" ng-click="new(${Number(this.time)})">+</div>\n`
 		}
+	}
+
+	function Plus(date,hour,offset,scale=1) {
+		this.height = 60 * scale
+		scale /= 60000
+		date = $date.midnight(date)
+		this.top = (Number(hour) - Number(date)) * scale - offset.px
+		offset.px += this.height
 	}
 
 	function Day(initial,plus_days) {
 		var midnight = $date.move($date.midnight(initial),0,0,plus_days)
 		this.head = midnight
-		this.hours = []
+		this.content = []
 		for (var h = 0; h < $scope.hours.length; h++) {
-			this.hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
+			this.content.push(new Hour($date.combine(midnight,$scope.hours[h])))
 		}
-		this.events = []
-		this.add_event = function() {} // Sort events by start time
-		this.print = function(element) {
-			var divs = []
-			var e = 0, h = 0
-			// // If one of them is depleted, do the other one
-			// while (e < this.events.length || h < this.hours.length) {
-			// 	if (this.events[e].start <= this.hours[h]) {
-			// 		divs.push(this.events[e++])
-			// 	} else {
-			// 		divs.push(this.hours[h++])
-			// 	}
-			// }
-			var html = ''
-			var offset = {'px':0}
-			for (var i = 0; i < this.hours.length; i++) {
-				html += this.hours[i].div(midnight,offset)
+		this.add_event = function(event) {
+			var place = binary_search(event,this.content)
+			for (var i = this.content.length - 1; i > place; i--) {
+				this.content[i] = this.content[i-1]
 			}
-			// console.log(html)
-			// var html = this.head + '<br>&#x1f984;'
-			element.innerHTML = html
 		}
+		this.html = function() {
+			var result = []
+			var offset = {'px':0}
+			for (var i = 0; i < this.content.length; i++) {
+				var type = this.content[i].__proto__.constructor.name
+				if (type == "Hour") {
+					result.push(new Plus(midnight,this.content[i],offset))
+				} else if (type == "Event") {
+
+				}
+				return result
+			}
+		}
+		// this.content = function() {
+		// 	var divs = []
+		// 	var e = 0, h = 0
+		// 	// If one of them is depleted, do the other one
+		// 	while (h < this.hours.length) {
+		// 	// while (e < this.events.length || h < this.hours.length) {
+		// 		// if (this.events[e].start <= this.hours[h]) {
+		// 			// divs.push(this.events[e++])
+		// 		// } else {
+		// 			divs.push(this.hours[h++])
+		// 		// }
+		// 	}
+		// 	return divs
+		// 	// var html = ''
+		// 	// var offset = {'px':0}
+		// 	// for (var i = 0; i < this.hours.length; i++) {
+		// 	// 	html += this.hours[i].div(midnight,offset)
+		// 	// }
+		// 	// // console.log(html)
+		// 	// // var html = this.head + '<br>&#x1f984;'
+		// 	// element.innerHTML = html
+		// }
 	}
 
 // Support Functions
@@ -222,7 +248,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		// var x = $('.day')
 		// console.log(x)
 
-		// EventFactory.print()
+		EventFactory.print()
 
 
 	}
