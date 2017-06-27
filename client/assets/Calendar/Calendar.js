@@ -40,46 +40,18 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			'color' : '#facade',
 		}
 
-		// $('#calendar-scroll').it(function(element) {
-		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		// })
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		})
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
 		})
 
-		// $('.day').index(0,function(element,i) {
-			// console.log(element)
-		// })
-
-		// $('.plus').every(function(element,i) {
-
-		// })
-
-		// $('.day').every(function(element,off_by_one) {
-		// 	// element.innerHTML = 'Goodbye' + i
-		// 	var i = off_by_one - 1
-		// 	// console.log($scope.days[i])
-		// 	if (off_by_one) {
-		// 		$scope.days[i].print(element)
-		// 	}
-		// 	// element.innerHTML = i + '&#x1f984;'
-		// })
-
 	// Events
 
 		EventFactory.get(function(events) {
-			var offset = {px:0}
-			var html = ''
-			// for (var i = 0; i < events.length; i++) {
-			// 	html += events[i].div(start,offset)
-			// }
-			for (var i = 0; i < $scope.hours.length; i++) {
-				$scope.hours[i]
-			}
-			$('.day').index(0,function(day) {
-				day.innerHTML = html
-			})
+			
 		})
 
 // Constructors
@@ -126,34 +98,11 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 				var type = this.content[i].__proto__.constructor.name
 				if (type == "Hour") {
 					result.push(new Plus(midnight,this.content[i],offset))
-				} else if (type == "Event") {
+				} else if (type == "Event") {}
 
-				}
-				return result
 			}
+			return result
 		}
-		// this.content = function() {
-		// 	var divs = []
-		// 	var e = 0, h = 0
-		// 	// If one of them is depleted, do the other one
-		// 	while (h < this.hours.length) {
-		// 	// while (e < this.events.length || h < this.hours.length) {
-		// 		// if (this.events[e].start <= this.hours[h]) {
-		// 			// divs.push(this.events[e++])
-		// 		// } else {
-		// 			divs.push(this.hours[h++])
-		// 		// }
-		// 	}
-		// 	return divs
-		// 	// var html = ''
-		// 	// var offset = {'px':0}
-		// 	// for (var i = 0; i < this.hours.length; i++) {
-		// 	// 	html += this.hours[i].div(midnight,offset)
-		// 	// }
-		// 	// // console.log(html)
-		// 	// // var html = this.head + '<br>&#x1f984;'
-		// 	// element.innerHTML = html
-		// }
 	}
 
 // Support Functions

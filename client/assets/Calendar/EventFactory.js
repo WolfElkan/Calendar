@@ -5,6 +5,7 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	var loaded_dates = []
 
 	function Event(data) {
+		console.log('new Event')
 		this.title = data.title
 		this.color = data.color
 		this.start = $date.parse(data.start)
