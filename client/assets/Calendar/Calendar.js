@@ -28,21 +28,14 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			$scope.hours.push($date.move(start,0,0,0,h))
 		}
 
-		$scope.days = []
-		for (var d = 0; d < 7; d++) {
-			$scope.days.push(new Day(start,d))
-		}
-
-		console.log($scope.days)
-
 		$scope.new_event = {
 			'title' : '',
 			'color' : '#facade',
 		}
 
-		$('#calendar-scroll').it(function(element) {
-			element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		})
+		// $('#calendar-scroll').it(function(element) {
+		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		// })
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
@@ -51,7 +44,24 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 	// Events
 
 		EventFactory.get(function(events) {
-			
+		
+			$scope.days = []
+			for (var d = 0; d < 7; d++) {
+				$scope.days.push(new Day(start,d))
+			}
+		
+			console.log($scope.days)
+		
+			$scope.cross = function(option) {
+				if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
+					return option == 0
+				} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
+					return option == 1
+				} else {
+					return option == 2
+				}
+			}
+
 		})
 
 // Constructors
@@ -70,7 +80,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		}
 	}
 
-	function HourGraphic(date,hour,offset,scale=1) {
+	function PlusBox(date,hour,offset,scale=1) {
 		this.height = 60 * scale
 		scale /= 60000
 		date = $date.midnight(date)
@@ -100,9 +110,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		var offset = {'px':0}
 		while (h < hours.length || e < events.length) {
 			if (hours[h] ? hours[h].time : Infinity < events[e] ? events[e].start : Infinity) {
-				content.push(new HourGraphic(midnight,hours[h],offset))
+				content.push(new PlusBox(midnight,hours[h++],offset))
 			} else {
-				content.push(new EventGraphic(events[e],offset))
+				content.push(new EventGraphic(events[e++],offset))
 			}
 		}
 		this.head = midnight
@@ -129,7 +139,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		// 	for (var i = 0; i < content.length; i++) {
 		// 		var type = content[i].__proto__.constructor.name
 		// 		if (type == "Hour") {
-		// 			result.push(new HourGraphic(midnight,content[i],offset))
+		// 			result.push(new PlusBox(midnight,content[i],offset))
 		// 		} else if (type == "Event") {}
 
 		// 	}
@@ -200,16 +210,6 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
 		})
-	}
-
-	$scope.cross = function(option) {
-		if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
-			return option == 0
-		} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
-			return option == 1
-		} else {
-			return option == 2
-		}
 	}
 
 	$scope.isToday = function(day) {

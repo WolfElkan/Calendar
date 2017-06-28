@@ -3,7 +3,7 @@ var Event = require('../models/event.js')
 var events = {}
 
 events.index  = function(request, response) {
-	Event.find({},function(error,result) {
+	Event.find({}).sort('start').exec(function(error,result) {
 		response.json({'events':result})
 	})
 }

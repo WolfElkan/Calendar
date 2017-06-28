@@ -23,7 +23,8 @@
 			</div><div class="day" style="display: none;">
 				This is a workaround for now, but I need to figure out why I can't select the first element.
 			</div><div class="day" ng-repeat="day in days">
-				<div class="plus" ng-click="new(block)" ng-repeat="block in day.html()">+</div>
+				<div ng-repeat="graphic in day.content()">{{graphic.__proto__.constructor.name}}</div>
+				<!-- <div class="plus" ng-click="new(block)" ng-repeat="block in day.html()">+</div> -->
 			</div>
 		</div>
 	</div>

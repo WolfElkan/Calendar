@@ -86,7 +86,7 @@ h2 {
 .day-head {
 	/*background-color: red;*/
 	display: inline-block;
-	width: calc(14.286% - 10px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 eyeballed */
+	width: calc(14.286% - 12px); /* 100%/7 - (scroll_bar_width + time_bar_width)/7 eyeballed */
 	text-align: center;
 	/*background-color: pink;*/
 }
