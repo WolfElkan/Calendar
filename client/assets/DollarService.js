@@ -19,7 +19,7 @@ app.service('$',function() {
 		}
 	}
 
-	var service = function(selector,callback,index,parent=document) {
+	var service = function(selector,parent=document) {
 		var got
 		if (selector[0] == '#') {
 			got = parent.getElementById(selector.substr(1))

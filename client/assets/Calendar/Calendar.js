@@ -70,39 +70,71 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		}
 	}
 
-	function Plus(date,hour,offset,scale=1) {
+	function HourGraphic(date,hour,offset,scale=1) {
 		this.height = 60 * scale
 		scale /= 60000
 		date = $date.midnight(date)
 		this.top = (Number(hour) - Number(date)) * scale - offset.px
 		offset.px += this.height
+		this.class = "plus"
+		this.title = "+"
+		this.color = null
 	}
 
-	function Day(initial,plus_days) {
+	function EventGraphic(event,offset,scale=1) {
+		this.class  = "event"
+		this.title  = event.title
+		this.height = (event.end - event.start) * scale
+		this.top    = (Number(event.start) - Number(date)) * scale - offset.px
+		this.color  = event.color
+	}
+
+	function Day(initial,plus_days,events=[]) {
 		var midnight = $date.move($date.midnight(initial),0,0,plus_days)
-		this.head = midnight
-		this.content = []
+		var hours = []
 		for (var h = 0; h < $scope.hours.length; h++) {
-			this.content.push(new Hour($date.combine(midnight,$scope.hours[h])))
+			hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
+		}
+		var content = []
+		var h = 0, e = 0
+		var offset = {'px':0}
+		while (h < hours.length || e < events.length) {
+			if (hours[h] ? hours[h].time : Infinity < events[e] ? events[e].start : Infinity) {
+				content.push(new HourGraphic(midnight,hours[h],offset))
+			} else {
+				content.push(new EventGraphic(events[e],offset))
+			}
+		}
+		this.head = midnight
+		this.content = function(day_element) {
+			setTimeout(function() {
+				var apply_styles = function(element,i) {
+					element.style.top = content[i].top
+					element.style.height = content[i].height
+				}
+				$('.plus',day_element).every(apply_styles)
+				$('.event',day_element).every(apply_styles)
+			}, 0);
+			return content
 		}
 		this.add_event = function(event) {
-			var place = binary_search(event,this.content)
-			for (var i = this.content.length - 1; i > place; i--) {
-				this.content[i] = this.content[i-1]
+			var place = binary_search(event,content)
+			for (var i = content.length - 1; i > place; i--) {
+				content[i] = content[i-1]
 			}
 		}
-		this.html = function() {
-			var result = []
-			var offset = {'px':0}
-			for (var i = 0; i < this.content.length; i++) {
-				var type = this.content[i].__proto__.constructor.name
-				if (type == "Hour") {
-					result.push(new Plus(midnight,this.content[i],offset))
-				} else if (type == "Event") {}
+		// this.html = function() {
+		// 	var result = []
+		// 	var offset = {'px':0}
+		// 	for (var i = 0; i < content.length; i++) {
+		// 		var type = content[i].__proto__.constructor.name
+		// 		if (type == "Hour") {
+		// 			result.push(new HourGraphic(midnight,content[i],offset))
+		// 		} else if (type == "Event") {}
 
-			}
-			return result
-		}
+		// 	}
+		// 	return result
+		// }
 	}
 
 // Support Functions
