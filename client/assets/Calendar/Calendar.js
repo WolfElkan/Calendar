@@ -43,26 +43,25 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 	// Events
 
-		EventFactory.get(function(events) {
+		$scope.days = []
 		
-			$scope.days = []
-			for (var d = 0; d < 7; d++) {
-				$scope.days.push(new Day(start,d))
-			}
-		
-			console.log($scope.days)
-		
-			$scope.cross = function(option) {
-				if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
-					return option == 0
-				} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
-					return option == 1
-				} else {
-					return option == 2
+		for (var d = 0; d < 7; d++) {
+			var date = $date.move($date.midnight(start),0,0,d)
+			EventFactory.get_by_date(date,function(events) {
+				$scope.days.push(new Day(date,0,events))
+			})
+			if (d == 6) {
+				$scope.cross = function(option) {
+					if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
+						return option == 0
+					} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
+						return option == 1
+					} else {
+						return option == 2
+					}
 				}
 			}
-
-		})
+		}
 
 // Constructors
 
@@ -99,7 +98,8 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		this.color  = event.color
 	}
 
-	function Day(initial,plus_days,events=[]) {
+	function Day(initial,plus_days,events) {
+		console.log(events)
 		var midnight = $date.move($date.midnight(initial),0,0,plus_days)
 		var hours = []
 		for (var h = 0; h < $scope.hours.length; h++) {
@@ -109,7 +109,8 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		var h = 0, e = 0
 		var offset = {'px':0}
 		while (h < hours.length || e < events.length) {
-			if (hours[h] ? hours[h].time : Infinity < events[e] ? events[e].start : Infinity) {
+			 // 
+			if ((hours[h] ? hours[h].time : Infinity) < (events[e] ? events[e].start : Infinity)) {
 				content.push(new PlusBox(midnight,hours[h++],offset))
 			} else {
 				content.push(new EventGraphic(events[e++],offset))

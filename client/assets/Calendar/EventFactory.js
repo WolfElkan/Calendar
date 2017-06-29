@@ -5,19 +5,18 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	var loaded_dates = []
 
 	function Event(data) {
-		console.log('new Event')
 		this.title = data.title
 		this.color = data.color
 		this.start = $date.parse(data.start)
 		this.end   = $date.parse(data.end)
 		// this.created_at = $date.parse(data.created_at)
 		// this.updated_at = $date.parse(data.updated_at)
-		this.Graphic = function(date,offset,scale=1) {
-			scale /= 60000
-			date = $date.midnight(date)
-			var top = (Number(this.start) - Number(date)) * scale - offset.px
-			var height = (this.end - this.start) * scale
-		}
+		// this.Graphic = function(date,offset,scale=1) {
+		// 	scale /= 60000
+		// 	date = $date.midnight(date)
+		// 	var top = (Number(this.start) - Number(date)) * scale - offset.px
+		// 	var height = (this.end - this.start) * scale
+		// }
 	}
 
 	factory.get = function(callback) {
@@ -42,6 +41,20 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 			}
 		} else {
 			throw new TypeError('Expected Function, got',callback.__proto__.constructor.name)
+		}
+	}
+
+	factory.get_by_date = function(date,callback) {
+		var event1 = new Event({
+			'title' : 'Test',
+			'color' : '#c0ffee',
+			'start' : '2017-06-29T12:00:00.000',
+			'end'   : '2017-06-29T14:00:00.000',
+		})
+		if (Number($date.midnight(date)) == Number($date.midnight(event1.start))) {
+			return callback([event1])
+		} else {
+			return callback([])
 		}
 	}
 
