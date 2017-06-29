@@ -48,8 +48,8 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		var event1 = new Event({
 			'title' : 'Test',
 			'color' : '#c0ffee',
-			'start' : '2017-06-29T12:00:00.000',
-			'end'   : '2017-06-29T14:00:00.000',
+			'start' : '2017-06-29T14:00:00.000',
+			'end'   : '2017-06-29T15:30:00.000',
 		})
 		if (Number($date.midnight(date)) == Number($date.midnight(event1.start))) {
 			return callback([event1])

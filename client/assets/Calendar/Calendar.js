@@ -33,9 +33,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			'color' : '#facade',
 		}
 
-		// $('#calendar-scroll').it(function(element) {
-		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		// })
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		})
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
@@ -48,7 +48,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		for (var d = 0; d < 7; d++) {
 			var date = $date.move($date.midnight(start),0,0,d)
 			EventFactory.get_by_date(date,function(events) {
-				$scope.days.push(new Day(date,0,events))
+				$scope.days.push(new Day(date,d,events))
 			})
 			if (d == 6) {
 				$scope.cross = function(option) {
@@ -83,7 +83,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		this.height = 60 * scale
 		scale /= 60000
 		date = $date.midnight(date)
-		this.top = (Number(hour) - Number(date)) * scale - offset.px
+		this.top = (Number(hour.time) - Number(date)) * scale - offset.px
 		offset.px += this.height
 		this.class = "plus"
 		this.title = "+"
@@ -91,16 +91,17 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 	}
 
 	function EventGraphic(event,offset,scale=1) {
+		scale /= 60000
 		this.class  = "event"
 		this.title  = event.title
 		this.height = (event.end - event.start) * scale
 		this.top    = (Number(event.start) - Number(date)) * scale - offset.px
 		this.color  = event.color
+		offset.px += this.height
 	}
 
-	function Day(initial,plus_days,events) {
-		console.log(events)
-		var midnight = $date.move($date.midnight(initial),0,0,plus_days)
+	function Day(initial,index,events) {
+		var midnight = $date.midnight(initial)
 		var hours = []
 		for (var h = 0; h < $scope.hours.length; h++) {
 			hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
@@ -109,23 +110,33 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		var h = 0, e = 0
 		var offset = {'px':0}
 		while (h < hours.length || e < events.length) {
-			 // 
+			var l = content.length
 			if ((hours[h] ? hours[h].time : Infinity) < (events[e] ? events[e].start : Infinity)) {
-				content.push(new PlusBox(midnight,hours[h++],offset))
+				content.push(new PlusBox(midnight,hours[h],offset))
+				hours[h] = content[l]
+				h++
 			} else {
-				content.push(new EventGraphic(events[e++],offset))
+				content.push(new EventGraphic(events[e],offset))
+				events[e] = content[l]
+				e++
 			}
 		}
+		// console.log(offset.px)
 		this.head = midnight
-		this.content = function(day_element) {
-			setTimeout(function() {
-				var apply_styles = function(element,i) {
-					element.style.top = content[i].top
-					element.style.height = content[i].height
-				}
-				$('.plus',day_element).every(apply_styles)
-				$('.event',day_element).every(apply_styles)
-			}, 0);
+		this.content = function() {
+			$('.day').index(index+1,function(day_element) {
+				setTimeout(function() {
+					$('.plus',day_element).every(function(element,h) {
+						element.style.top    = hours[h].top     + 'px'
+						element.style.height = hours[h].height  + 'px'
+					})
+					$('.event',day_element).every(function(element,e) {
+						element.style.top    = events[e].top    + 'px'
+						element.style.height = events[e].height + 'px'
+						element.style.backgroundColor = events[e].color
+					})
+				}, 0);
+			})
 			return content
 		}
 		this.add_event = function(event) {
@@ -134,18 +145,6 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 				content[i] = content[i-1]
 			}
 		}
-		// this.html = function() {
-		// 	var result = []
-		// 	var offset = {'px':0}
-		// 	for (var i = 0; i < content.length; i++) {
-		// 		var type = content[i].__proto__.constructor.name
-		// 		if (type == "Hour") {
-		// 			result.push(new PlusBox(midnight,content[i],offset))
-		// 		} else if (type == "Event") {}
-
-		// 	}
-		// 	return result
-		// }
 	}
 
 // Support Functions

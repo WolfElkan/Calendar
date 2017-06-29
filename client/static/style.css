@@ -132,8 +132,8 @@ h2 {
 	width: 100%;
 	/*width: calc(14% - 11px);*/
 	 /* 100%/7 - time_bar_width/7 - border */
-	/*height: 300px;
-	background-color: yellow;*/
+	/*height: 300px;*/
+	/*background-color: yellow;*/
 	position: relative;
 }
 
