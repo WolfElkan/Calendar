@@ -32,6 +32,11 @@ module.exports = function(app){
 		}
 	});
 
+	app.get('/events/test', function(req, res) {
+		console.log('routes: test')
+		events.test(req, res);
+	})
+
 	app.get('/events/:id', function(req, res) {
 		events.show(req, res);
 	});

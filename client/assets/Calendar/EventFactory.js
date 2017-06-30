@@ -20,7 +20,7 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	}
 
 	function LoadedDate(date,events) {
-		this.date   = date
+		this.date   = new Date(date)
 		this.events = events
 	}
 
@@ -71,16 +71,30 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		if (lookup.length) {
 			console.log('http')
 			$http.get('/events',{params:{dates:lookup}}).then(function(returned) {
-				console.log(returned.data)
+				var slds = returned.data.days
+				for (var i = 0; i < slds.length; i++) {
+					var sld = slds[i]
+					fx_loaded_dates[sld.di] = new LoadedDate(sld.date,sld.events)
+				}
+				for (var i = 0; i < fx_loaded_dates.length; i++) {
+					callback(fx_loaded_dates[i],i)
+				}
 			})
 		} else {
 			for (var i = 0; i < fx_loaded_dates.length; i++) {
-				callback(fx_loaded_dates[i].events)
+				callback(fx_loaded_dates[i],i)
 			}
 		}
+
 	}
 
 	factory.validations = []
+
+	factory.test = function() {
+		$http.get('/events/test',{params:{date:1498449600000-86400000}}).then(function(returned) {
+			console.log(returned.data)
+		})
+	}
 
 	factory.create = function(new_event,callback) {
 		var obj = $valid.ate(factory,new_event)

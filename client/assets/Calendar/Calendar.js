@@ -33,9 +33,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			'color' : '#facade',
 		}
 
-		$('#calendar-scroll').it(function(element) {
-			element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		})
+		// $('#calendar-scroll').it(function(element) {
+		// 	element.scrollTop = 530 // 8:50 AM to 5:10 PM
+		// })
 
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'
@@ -51,19 +51,23 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			var date = $date.move($date.midnight(start),0,0,d)
 			dates.push(date)
 		}
-		EventFactory.get_by_dates(dates,function(events) {
-			// $scope.days.push(new Day(date,d,events))
+
+		EventFactory.get_by_dates(dates,function(loaded_date,index) {
+			console.log(loaded_date)
+			$scope.days.push(new Day(loaded_date,index))
 		})
 
-		// $scope.cross = function(option) {
-		// 	if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
-		// 		return option == 0
-		// 	} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
-		// 		return option == 1
-		// 	} else {
-		// 		return option == 2
-		// 	}
-		// }
+		console.log($scope.days)
+
+		$scope.cross = function(option) {
+			if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
+				return option == 0
+			} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
+				return option == 1
+			} else {
+				return option == 2
+			}
+		}
 // Constructors
 
 	function Hour(time) {
@@ -101,8 +105,10 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		offset.px += this.height
 	}
 
-	function Day(initial,index,events) {
-		var midnight = $date.midnight(initial)
+	// function Day(initial,index,events) {
+	function Day(loaded_date,index) {
+		var midnight = $date.midnight(loaded_date.date)
+		var events = loaded_date.events
 		var hours = []
 		for (var h = 0; h < $scope.hours.length; h++) {
 			hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
@@ -222,7 +228,15 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 	}
 
 	$scope.nav = function(dDays) {
+		var scroll
+		$('#calendar-scroll').it(function(element) {
+			scroll = element.scrollTop
+		})
 		go($date.move(start,0,0,dDays))
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = scroll
+		})
+
 	}
 
 	$scope.print = function() {
@@ -249,6 +263,10 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			result.push(i)
 		}
 		return result
+	}
+
+	$scope.test = function() {
+		EventFactory.test()
 	}
 
 }])
