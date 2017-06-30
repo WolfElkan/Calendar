@@ -19,6 +19,16 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		// }
 	}
 
+	function LoadedDate(date,events) {
+		this.date   = date
+		this.events = events
+	}
+
+	function LookupDate(di,date) {
+		this.di   = di
+		this.date = Number(date)
+	}
+
 	factory.get = function(callback) {
 		if (typeof(callback) == 'function') {
 			if (content[0]) {
@@ -44,17 +54,29 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		}
 	}
 
-	factory.get_by_date = function(date,callback) {
-		var event1 = new Event({
-			'title' : 'Test',
-			'color' : '#c0ffee',
-			'start' : '2017-06-29T14:00:00.000',
-			'end'   : '2017-06-29T15:30:00.000',
-		})
-		if (Number($date.midnight(date)) == Number($date.midnight(event1.start))) {
-			return callback([event1])
+	factory.get_by_dates = function(dates,callback) {
+		var fx_loaded_dates = []
+		var lookup = []
+		for (var d = 0; d < dates.length; d++) {
+			var date = dates[d]
+			// date = $date.midnight(date)
+			var date_index = $find.index(loaded_dates,date,'date')
+			if (date_index + 1) {
+				fx_loaded_dates[d] = (loaded_dates[date_index])
+			} else {
+				lookup.push(new LookupDate(d,date))
+			}
+		}
+		console.log(lookup)
+		if (lookup.length) {
+			console.log('http')
+			$http.get('/events',{params:{dates:lookup}}).then(function(returned) {
+				console.log(returned.data)
+			})
 		} else {
-			return callback([])
+			for (var i = 0; i < fx_loaded_dates.length; i++) {
+				callback(fx_loaded_dates[i].events)
+			}
 		}
 	}
 
@@ -122,6 +144,12 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 				console.log(content)
 			})
 		}
+	}
+
+	factory.echo = function() {
+		$http.get('/echo').then(function(returned) {
+			console.log(returned.data)
+		})
 	}
 
 	return factory

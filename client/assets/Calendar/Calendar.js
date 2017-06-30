@@ -45,24 +45,25 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 		$scope.days = []
 		
-		for (var d = 0; d < 7; d++) {
+		var nDays = 7
+		var dates = []
+		for (var d = 0; d < nDays; d++) {
 			var date = $date.move($date.midnight(start),0,0,d)
-			EventFactory.get_by_date(date,function(events) {
-				$scope.days.push(new Day(date,d,events))
-			})
-			if (d == 6) {
-				$scope.cross = function(option) {
-					if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
-						return option == 0
-					} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
-						return option == 1
-					} else {
-						return option == 2
-					}
-				}
-			}
+			dates.push(date)
 		}
+		EventFactory.get_by_dates(dates,function(events) {
+			// $scope.days.push(new Day(date,d,events))
+		})
 
+		// $scope.cross = function(option) {
+		// 	if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
+		// 		return option == 0
+		// 	} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
+		// 		return option == 1
+		// 	} else {
+		// 		return option == 2
+		// 	}
+		// }
 // Constructors
 
 	function Hour(time) {

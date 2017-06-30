@@ -25,7 +25,11 @@ module.exports = function(app){
 	});
 
 	app.get('/events', function(req, res) {
-		events.index(req, res);
+		if (req.query.dates) {
+			events.by_date(req, res)
+		} else {
+			events.index(req, res);
+		}
 	});
 
 	app.get('/events/:id', function(req, res) {

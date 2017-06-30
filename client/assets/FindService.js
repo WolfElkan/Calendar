@@ -24,6 +24,24 @@ app.service('$find',function() {
 		return result
 	}
 
+	service.isolate = function(object,path) {
+		var result = object
+		for (var i = 0; i < path.length; i++) {
+			result = result[path[i]]
+		}
+		return result
+	}
+
+	service.binary = function(content,value,path=[]) {
+		// if (!service.isSorted(content,path)) {
+		// 	console.log('Content not Sorted:', content)
+		// 	return null
+		// }
+
+	}
+
+	service.isSorted = function(content,path=[]) {}
+
 	return service
 	
 })
