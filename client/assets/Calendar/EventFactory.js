@@ -19,9 +19,9 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		// }
 	}
 
-	function LoadedDate(date,events) {
-		this.date   = new Date(date)
-		this.events = events
+	function LoadedDate(sld) {
+		this.date   = new Date(sld.date)
+		this.events = sld.events
 	}
 
 	function LookupDate(di,date) {
@@ -60,21 +60,24 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		for (var d = 0; d < dates.length; d++) {
 			var date = dates[d]
 			// date = $date.midnight(date)
-			var date_index = $find.index(loaded_dates,date,'date')
+			var date_index = $find.index(loaded_dates,Number(date),function(ld) {
+				return Number(ld.date)
+			})
+			// console.log(date_index)
 			if (date_index + 1) {
 				fx_loaded_dates[d] = (loaded_dates[date_index])
 			} else {
 				lookup.push(new LookupDate(d,date))
 			}
 		}
-		console.log(lookup)
-		if (lookup.length) {
-			console.log('http')
+		if (lookup[0]) {
 			$http.get('/events',{params:{dates:lookup}}).then(function(returned) {
 				var slds = returned.data.days
 				for (var i = 0; i < slds.length; i++) {
 					var sld = slds[i]
-					fx_loaded_dates[sld.di] = new LoadedDate(sld.date,sld.events)
+					var new_loaded_date = new LoadedDate(sld)
+					loaded_dates.push(new_loaded_date)
+					fx_loaded_dates[sld.di] = new_loaded_date
 				}
 				for (var i = 0; i < fx_loaded_dates.length; i++) {
 					callback(fx_loaded_dates[i],i)
@@ -150,14 +153,15 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	}
 
 	factory.print = function() {
-		if (content.length) {
-			console.log(content)
-		} else {
-			console.log('getting content...')
-			factory.get(function(content) {
-				console.log(content)
-			})
-		}
+		console.log(loaded_dates)
+		// if (content.length) {
+		// 	console.log(content)
+		// } else {
+		// 	console.log('getting content...')
+		// 	factory.get(function(content) {
+		// 		console.log(content)
+		// 	})
+		// }
 	}
 
 	factory.echo = function() {

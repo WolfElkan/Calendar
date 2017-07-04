@@ -45,7 +45,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 		$scope.days = []
 		
-		var nDays = 7
+		var nDays = 2
 		var dates = []
 		for (var d = 0; d < nDays; d++) {
 			var date = $date.move($date.midnight(start),0,0,d)
@@ -53,21 +53,23 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		}
 
 		EventFactory.get_by_dates(dates,function(loaded_date,index) {
-			console.log(loaded_date)
+			// console.log(loaded_date)
 			$scope.days.push(new Day(loaded_date,index))
+			if (index == nDays - 1) {
+				$scope.cross = function(option) {
+					if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
+						return option == 0
+					} else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
+						return option == 1
+					} else {
+						return option == 2
+					}
+				}
+			}
 		})
 
 		console.log($scope.days)
 
-		$scope.cross = function(option) {
-			if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
-				return option == 0
-			} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
-				return option == 1
-			} else {
-				return option == 2
-			}
-		}
 // Constructors
 
 	function Hour(time) {
@@ -120,12 +122,10 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			var l = content.length
 			if ((hours[h] ? hours[h].time : Infinity) < (events[e] ? events[e].start : Infinity)) {
 				content.push(new PlusBox(midnight,hours[h],offset))
-				hours[h] = content[l]
-				h++
+				hours[h++] = content[l]
 			} else {
 				content.push(new EventGraphic(events[e],offset))
-				events[e] = content[l]
-				e++
+				events[e++] = content[l]
 			}
 		}
 		// console.log(offset.px)
@@ -157,12 +157,21 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 // Support Functions
 
 	function go(date) {
+		var scroll
+		$('#calendar-scroll').it(function(element) {
+			scroll = element.scrollTop
+		})
+		
 		date = new Date(date)
 		var url = 'calendar?view=week'
 		url += '&year=' + date.getFullYear()
 		url += '&month='+ date.getMonth()
 		url += '&date=' + date.getDate()
 		$location.url(url)
+
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = scroll ? scroll : 530
+		})
 	}
 
 	function display(day,events) {
@@ -228,15 +237,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 	}
 
 	$scope.nav = function(dDays) {
-		var scroll
-		$('#calendar-scroll').it(function(element) {
-			scroll = element.scrollTop
-		})
 		go($date.move(start,0,0,dDays))
-		$('#calendar-scroll').it(function(element) {
-			element.scrollTop = scroll
-		})
-
 	}
 
 	$scope.print = function() {

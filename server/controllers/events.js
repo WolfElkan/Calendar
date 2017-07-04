@@ -16,13 +16,13 @@ function LookupDateBatch(lookups,response) {
 		children.push(new LookupDate(lookups[i],self))
 	}
 	self.go = function() {
-		console.log('# batch: go')
+		// console.log('# batch: go')
 		for (var i = 0; i < children.length; i++) {
 			children[i].query()
 		}
 	}
 	self.check = function() {
-		console.log('# batch: check')
+		// console.log('# batch: check')
 		for (var i = 0; i < children.length; i++) {
 			if (!children[i].ready) {
 				return false
@@ -77,10 +77,10 @@ function LookupDate(lookup,batch) {
 	self.di    = lookup.di
 	var qstart = new Date(lookup.date)
 	var qend   = new Date(lookup.date + (lookup.len ? lookup.len : 86400000))
-	console.log(lookup)
+	// console.log(lookup)
 	self.events = []
 	self.query = function() {
-		console.log('# date : query')
+		console.log('query')
 		Event.find(between(qstart,qend)).sort('start').exec(function(error,found_events) {
 			// console.log(error,found_events)
 			for (var i = 0; i < found_events.length; i++) {
