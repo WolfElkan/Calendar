@@ -1,6 +1,6 @@
 var blocks = require('../controllers/blocks.js')
 var events = require('../controllers/events.js')
-var tasks = require('../controllers/tasks.js')
+var tasks  = require('../controllers/tasks.js')
 
 module.exports = function(app){
 
@@ -25,7 +25,11 @@ module.exports = function(app){
 	});
 
 	app.get('/events', function(req, res) {
-		events.index(req, res);
+		if (req.query.date) {
+			events.by_date(req, res)
+		} else {
+			events.index(req, res);
+		}
 	});
 
 	app.get('/events/:id', function(req, res) {

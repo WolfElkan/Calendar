@@ -15,6 +15,32 @@ events.show = function(request, response) {
 	})
 }
 
+function between(start,end) {
+	start = new Date(start)
+	end   = new Date(end)
+	return {$or:[
+		{start: {$gte: start, $lt : end} },
+		{end  : {$gt : start, $lte: end} },
+		{$and: [
+			{start: {$lte: start} },
+			{end  : {$gte: end  } },
+		]}
+	]}
+}
+
+events.by_date = function(request,response) {
+	var start = Number(request.query.date)
+	var end   = start + 86400000
+	var range = between(start,end)
+	Event.find(range,function(error,found_events) {
+		if (error) {
+			console.log(error.stringValue)
+		} else {
+			response.json(found_events)
+		}
+	})
+}
+
 events.create = function(request,response) {
 	console.log('create event')
 	new_event = new Event({

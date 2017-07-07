@@ -44,18 +44,28 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		}
 	}
 
-	factory.get_by_date = function(date,callback) {
-		var event1 = new Event({
-			'title' : 'Test',
-			'color' : '#c0ffee',
-			'start' : '2017-06-29T14:00:00.000',
-			'end'   : '2017-06-29T15:30:00.000',
+	// factory.get_by_date = function(date,callback) {
+	// 	var event1 = new Event({
+	// 		'title' : 'Test',
+	// 		'color' : '#c0ffee',
+	// 		'start' : '2017-07-07T14:00:00.000',
+	// 		'end'   : '2017-07-07T15:30:00.000',
+	// 	})
+	// 	if (Number($date.midnight(date)) == Number($date.midnight(event1.start))) {
+	// 		return callback([event1])
+	// 	} else {
+	// 		return callback([])
+	// 	}
+	// }
+
+	factory.get_by_date = function(date,index,callback) {
+		$http.get('/events',{params:{date:Number(date)}}).then(function(returned) {
+			var events = []
+			for (var i = 0; i < returned.data.length; i++) {
+				events.push(new Event(returned.data[i]))
+			}
+			callback(events,index)
 		})
-		if (Number($date.midnight(date)) == Number($date.midnight(event1.start))) {
-			return callback([event1])
-		} else {
-			return callback([])
-		}
 	}
 
 	factory.validations = []

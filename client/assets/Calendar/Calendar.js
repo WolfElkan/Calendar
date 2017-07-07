@@ -8,7 +8,6 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		if (!$routeParams.year) {
 			var now = new Date()
 			now -= now.getDay() * 86400000
-			now = new Date(now)
 			go(now)
 		}
 
@@ -43,24 +42,30 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 	// Events
 
+		// console.log(start)
+
+		var nDays = 7
+		$scope.nDays = nDays
 		$scope.days = []
 		
-		for (var d = 0; d < 7; d++) {
+		for (var d = 0; d < nDays; d++) {
 			var date = $date.move($date.midnight(start),0,0,d)
-			EventFactory.get_by_date(date,function(events) {
-				$scope.days.push(new Day(date,d,events))
-			})
-			if (d == 6) {
-				$scope.cross = function(option) {
-					if ($scope.days[0].head.getMonth() == $scope.days[6].head.getMonth()) {
-						return option == 0
-					} else if ($scope.days[0].head.getYear() == $scope.days[6].head.getYear()) {
-						return option == 1
-					} else {
-						return option == 2
+			EventFactory.get_by_date(date,d,function(events,index) {
+				console.log(index,date,events)
+				$scope.days.push(new Day(date,index,events))
+				if (d == nDays-1) {
+					console.log($scope.days)
+					$scope.cross = function(option) {
+						if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
+							return option == 0
+						} else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
+							return option == 1
+						} else {
+							return option == 2
+						}
 					}
 				}
-			}
+			})
 		}
 
 // Constructors
@@ -123,8 +128,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		}
 		// console.log(offset.px)
 		this.head = midnight
+		this.events = events
 		this.content = function() {
-			$('.day').index(index+1,function(day_element) {
+			$('.day').index(index,function(day_element) {
 				setTimeout(function() {
 					$('.plus',day_element).every(function(element,h) {
 						element.style.top    = hours[h].top     + 'px'
@@ -158,20 +164,20 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		$location.url(url)
 	}
 
-	function display(day,events) {
-		var str = ''
-		var off = 0
-		for (var i = 0; i < events.length; i++) {
-			var event = new EventGraphic(events[i],off)
-			str += event.str
-			off = event.off
-		}
-		var html = str
-		html += day.innerHTML
-		day.innerHTML = html
-		// console.log(off/60)
-		day.$('.plus').bottom(off)
-	}
+	// function display(day,events) {
+	// 	var str = ''
+	// 	var off = 0
+	// 	for (var i = 0; i < events.length; i++) {
+	// 		var event = new EventGraphic(events[i],off)
+	// 		str += event.str
+	// 		off = event.off
+	// 	}
+	// 	var html = str
+	// 	html += day.innerHTML
+	// 	day.innerHTML = html
+	// 	// console.log(off/60)
+	// 	day.$('.plus').bottom(off)
+	// }
 
 // Scope Functions
 
