@@ -60,10 +60,9 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		for (var d = 0; d < dates.length; d++) {
 			var date = dates[d]
 			// date = $date.midnight(date)
-			var date_index = $find.index(loaded_dates,Number(date),function(ld) {
-				return Number(ld.date)
-			})
-			// console.log(date_index)
+			var date_index = $find.index(loaded_dates,Number(date),'date')
+			console.log(loaded_dates)
+			console.log(date_index)
 			if (date_index + 1) {
 				fx_loaded_dates[d] = (loaded_dates[date_index])
 			} else {

@@ -3,6 +3,9 @@ app.service('$find',function() {
 	var service = {}
 
 	service.equal = function(val1,val2) {
+		console.log(val1,val2)
+		val1 = val1 && val1.__proto__.constructor.name == "Date" ? Number(val1) : val1
+		val2 = val2 && val2.__proto__.constructor.name == "Date" ? Number(val2) : val2
 		return val1 == val2
 	}
 

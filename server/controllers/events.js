@@ -1,4 +1,5 @@
 var Event = require('../models/event.js')
+var decode = require('../utilities/decode.js')
 
 var events = {}
 
@@ -41,14 +42,15 @@ function LookupDateBatch(lookups,response) {
 }
 
 events.test = function(request, response) {
-	var start = Number(request.query.date)
-	// date = new Date(date)
-	var end = start + 86400000
-	// console.log(date)
-	// console.log(date.__proto__.constructor.name)
-	Event.find(between(start,end),function(error,found_events) {
-		response.json({events:found_events})
-	})
+	console.log(request.url)
+	// var start = Number(request.query.date)
+	// // date = new Date(date)
+	// var end = start + 86400000
+	// // console.log(date)
+	// // console.log(date.__proto__.constructor.name)
+	// Event.find(between(start,end),function(error,found_events) {
+	// 	response.json({events:found_events})
+	// })
 }
 
 function between(start,end) {
@@ -70,7 +72,7 @@ function between(start,end) {
 }
 
 function LookupDate(lookup,batch) {
-	lookup = JSON.parse(lookup)
+	lookup = JSON.parse(decode(lookup))
 	var self = this
 	self.date  = lookup.date
 	self.ready = false
@@ -80,7 +82,7 @@ function LookupDate(lookup,batch) {
 	// console.log(lookup)
 	self.events = []
 	self.query = function() {
-		console.log('query')
+		console.log('query',new Date(self.date))
 		Event.find(between(qstart,qend)).sort('start').exec(function(error,found_events) {
 			// console.log(error,found_events)
 			for (var i = 0; i < found_events.length; i++) {
@@ -93,6 +95,7 @@ function LookupDate(lookup,batch) {
 }
 
 events.by_date = function(request, response) {
+	console.log(decode(request.url))
 	var lookup_date_batch = new LookupDateBatch(request.query.dates,response)
 	lookup_date_batch.go()
 }

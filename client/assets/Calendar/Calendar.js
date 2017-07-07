@@ -132,17 +132,17 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		this.head = midnight
 		this.content = function() {
 			$('.day').index(index+1,function(day_element) {
-				setTimeout(function() {
-					$('.plus',day_element).every(function(element,h) {
-						element.style.top    = hours[h].top     + 'px'
-						element.style.height = hours[h].height  + 'px'
-					})
-					$('.event',day_element).every(function(element,e) {
-						element.style.top    = events[e].top    + 'px'
-						element.style.height = events[e].height + 'px'
-						element.style.backgroundColor = events[e].color
-					})
-				}, 0);
+				// setTimeout(function() {
+				// 	$('.plus',day_element).every(function(element,h) {
+				// 		element.style.top    = hours[h].top     + 'px'
+				// 		element.style.height = hours[h].height  + 'px'
+				// 	})
+				// 	$('.event',day_element).every(function(element,e) {
+				// 		element.style.top    = events[e].top    + 'px'
+				// 		element.style.height = events[e].height + 'px'
+				// 		element.style.backgroundColor = events[e].color
+				// 	})
+				// }, 0);
 			})
 			return content
 		}
