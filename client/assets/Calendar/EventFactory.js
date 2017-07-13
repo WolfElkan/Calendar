@@ -9,6 +9,7 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		this.color = data.color
 		this.start = $date.parse(data.start)
 		this.end   = $date.parse(data.end)
+		this._id   = data._id
 		// this.created_at = $date.parse(data.created_at)
 		// this.updated_at = $date.parse(data.updated_at)
 		// this.Graphic = function(date,offset,scale=1) {
@@ -58,13 +59,14 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	// 	}
 	// }
 
-	factory.get_by_date = function(date,index,callback) {
+	factory.get_by_date = function(date,callback) {
+		console.log(date)
 		$http.get('/events',{params:{date:Number(date)}}).then(function(returned) {
 			var events = []
 			for (var i = 0; i < returned.data.length; i++) {
 				events.push(new Event(returned.data[i]))
 			}
-			callback(events,index)
+			callback(events)
 		})
 	}
 

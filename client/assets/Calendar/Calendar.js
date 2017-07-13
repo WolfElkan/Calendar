@@ -46,45 +46,67 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 		var nDays = 7
 		$scope.nDays = nDays
-		$scope.days = []
+		$scope.days = [
+			new BlankDay,
+			new BlankDay,
+			new BlankDay,
+			new BlankDay,
+			new BlankDay,
+			new BlankDay,
+			new BlankDay
+		]
 		
 		for (var d = 0; d < nDays; d++) {
-			var date = $date.move($date.midnight(start),0,0,d)
-			EventFactory.get_by_date(date,d,function(events,index) {
-				console.log(index,date,events)
-				$scope.days.push(new Day(date,index,events))
-				if (d == nDays-1) {
-					console.log($scope.days)
-					$scope.cross = function(option) {
-						if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
-							return option == 0
-						} else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
-							return option == 1
-						} else {
-							return option == 2
-						}
-					}
-				}
+			new Day(start,d,(d == nDays-1),function() {
+				console.log($scope.days)
 			})
 		}
+			// var date = $date.move($date.midnight(start),0,0,d)
+			// EventFactory.get_by_date(date,d,function(events,index) {
+			// 	console.log(index,date,events)
+			// 	$scope.days.push(new Day(date,index,events))
+			// 	if (d == nDays-1) {
+			// 		console.log($scope.days)
+			// 		$scope.cross = function(option) {
+			// 			if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
+			// 				return option == 0
+			// 			} else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
+			// 				return option == 1
+			// 			} else {
+			// 				return option == 2
+			// 			}
+			// 		}
+			// 	}
+			// })
 
 // Constructors
 
+	function Offset(px) {
+		this.px = px
+	}
+
 	function Hour(time) {
 		this.time = time
-		this.div = function(date,offset,scale=1) {
-			var height = 60 * scale
-			scale /= 60000
-			date = $date.midnight(date)
-			var top = (Number(this.time) - Number(date)) * scale - offset.px
-			// console.log()
-			offset.px += height
-			return '<div plus time="12345">Hello</div>'
-			// return `<div plus top="${top}" height="${height}" time="${Number(this.time)}"></div>`
-		}
+		var plus_id = "plus"
+		plus_id += time.getDay()
+		plus_id += time.getHours() < 10 ? '0' : ''
+		plus_id += time.getHours()
+		this.plus_id = plus_id
+
+		// this.div = function(date,offset,scale=1) {
+		// 	var height = 60 * scale
+		// 	scale /= 60000
+		// 	date = $date.midnight(date)
+		// 	var top = (Number(this.time) - Number(date)) * scale - offset.px
+		// 	// console.log()
+		// 	offset.px += height
+		// 	return '<div plus time="12345">Hello</div>'
+		// 	// return `<div plus top="${top}" height="${height}" time="${Number(this.time)}"></div>`
+		// }
 	}
 
 	function PlusBox(date,hour,offset,scale=1) {
+		// console.log(arguments)
 		this.height = 60 * scale
 		scale /= 60000
 		date = $date.midnight(date)
@@ -93,64 +115,101 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		this.class = "plus"
 		this.title = "+"
 		this.color = null
+		// console.log(date)
+		this.id    = hour.plus_id
+		console.log(this.id)
 	}
 
-	function EventGraphic(event,offset,scale=1) {
+	function EventGraphic(event,date,offset,scale=1) {
 		scale /= 60000
 		this.class  = "event"
 		this.title  = event.title
 		this.height = (event.end - event.start) * scale
 		this.top    = (Number(event.start) - Number(date)) * scale - offset.px
 		this.color  = event.color
+		this.id     = event._id
 		offset.px += this.height
 	}
 
-	function Day(initial,index,events) {
-		var midnight = $date.midnight(initial)
-		var hours = []
-		for (var h = 0; h < $scope.hours.length; h++) {
-			hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
-		}
-		var content = []
-		var h = 0, e = 0
-		var offset = {'px':0}
-		while (h < hours.length || e < events.length) {
-			var l = content.length
-			if ((hours[h] ? hours[h].time : Infinity) < (events[e] ? events[e].start : Infinity)) {
-				content.push(new PlusBox(midnight,hours[h],offset))
-				hours[h] = content[l]
-				h++
-			} else {
-				content.push(new EventGraphic(events[e],offset))
-				events[e] = content[l]
-				e++
+	function BlankDay() {
+		this.head = ''
+		this.events = []
+		this.hours = []
+	}
+
+	function Day(initial,index,isLast,callback) {
+		var midnight = $date.midnight($date.move(initial,0,0,index))
+		var self = this
+		EventFactory.get_by_date(midnight,function(events) {
+			// console.log(midnight,events)
+			self.events = events
+
+			var hours = []
+			for (var h = 0; h < $scope.hours.length; h++) {
+				hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
 			}
-		}
-		// console.log(offset.px)
-		this.head = midnight
-		this.events = events
-		this.content = function() {
-			$('.day').index(index,function(day_element) {
-				setTimeout(function() {
-					$('.plus',day_element).every(function(element,h) {
-						element.style.top    = hours[h].top     + 'px'
-						element.style.height = hours[h].height  + 'px'
-					})
-					$('.event',day_element).every(function(element,e) {
-						element.style.top    = events[e].top    + 'px'
-						element.style.height = events[e].height + 'px'
-						element.style.backgroundColor = events[e].color
-					})
-				}, 0);
-			})
-			return content
-		}
-		this.add_event = function(event) {
-			var place = binary_search(event,content)
-			for (var i = content.length - 1; i > place; i--) {
-				content[i] = content[i-1]
+			self.hours = hours
+
+			self.event_links = []
+			self.hour_links  = []
+			var h = 0, e = 0
+			var offset = new Offset(0)
+			var content = []
+			while (h < hours.length || e < events.length) {
+				var l = content.length
+				if ((hours[h] ? hours[h].time : Infinity) < (events[e] ? events[e].start : Infinity)) {
+					content.push(new PlusBox(midnight,hours[h],offset))
+					self.hour_links[h] = content[l]
+					h++
+				} else {
+					content.push(new EventGraphic(events[e],midnight,offset))
+					self.event_links[e] = content[l]
+					e++
+				}
 			}
-		}
+			console.log(index, self.event_links)
+			self.content = function() {
+				// console.log(135)
+				$('.day').index(index,function(day_element) {
+					setTimeout(function() {
+						// $('.plus',day_element).every(function(element,h) {
+						// 	// console.log(element)
+						// })
+						// $('.event',day_element).every(function(element,e) {
+						// 	console.log(self.event_links[e])
+						// })
+						for (var h = 0; h < self.hours.length; h++) {
+							$('#' + self.hour_links[h].id).it(function(element) {
+								element.style.top    = self.hour_links[h].top     + 'px'
+								element.style.height = self.hour_links[h].height  + 'px'
+							})
+						}
+						for (var e = 0; e < self.events.length; e++) {
+							$('#' + self.event_links[e].id).it(function(element) {
+								// console.log(self.events[e],element)
+								// element.style.fontWeight = 'bold'
+								element.style.top    = self.event_links[e].top    + 'px'
+								element.style.height = self.event_links[e].height + 'px'
+								element.style.backgroundColor = events[e].color
+							})
+						}
+					}, 0);
+				})
+				return content
+			}
+			// console.log(offset.px)
+			self.head = midnight
+			self.add_event = function(event) {
+				var place = binary_search(event,content)
+				for (var i = content.length - 1; i > place; i--) {
+					content[i] = content[i-1]
+				}
+			}
+			$scope.days[index] = self
+			if (isLast) {
+				callback()
+			}
+		})
 	}
 
 // Support Functions
@@ -228,6 +287,17 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 	$scope.nav = function(dDays) {
 		go($date.move(start,0,0,dDays))
+	}
+
+	$scope.cross = function(option) {
+		// if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
+		// 	return option == 0
+		// } else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
+		// 	return option == 1
+		// } else {
+		// 	return option == 2
+		// }
+		return option == 0
 	}
 
 	$scope.print = function() {
