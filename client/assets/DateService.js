@@ -17,14 +17,14 @@ app.service('$date',function() {
 		)
 	}
 
-	service.parse = function(str) {
+	service.parse = function(str,tz=0) {
 		var year  = str.substr( 0,4)
 		var month = str.substr( 5,2) - 1
 		var date  = str.substr( 8,2)
 		var hour  = str.substr(11,2)
 		var min   = str.substr(14,2)
 		var sec   = str.substr(17,str.length-18)
-		return new Date(year,month,date,hour,min,sec)
+		return new Date(year,month,date,hour,min-tz,sec)
 	}
 
 	service.midnight = function(date) {

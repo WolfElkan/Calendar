@@ -5,10 +5,11 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	var loaded_dates = []
 
 	function Event(data) {
+		var tz = new Date().getTimezoneOffset()
 		this.title = data.title
 		this.color = data.color
-		this.start = $date.parse(data.start)
-		this.end   = $date.parse(data.end)
+		this.start = $date.parse(data.start,tz)
+		this.end   = $date.parse(data.end,tz)
 		this._id   = data._id
 		// this.created_at = $date.parse(data.created_at)
 		// this.updated_at = $date.parse(data.updated_at)

@@ -117,7 +117,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		this.color = null
 		// console.log(date)
 		this.id    = hour.plus_id
-		console.log(this.id)
+		this.hour  = hour
 	}
 
 	function EventGraphic(event,date,offset,scale=1) {
@@ -240,24 +240,32 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 // Scope Functions
 
+	$scope.click = function(graphic) {
+		if (graphic.__proto__.constructor.name == "PlusBox") {
+			$scope.new(graphic.hour)
+		}
+	}
+
 	$scope.new = function(hour) {
 		hour = hour.time
-		$scope.new_event.dateE = new Date(Number(hour) + 3600000)
-		$scope.new_event.timeE = new Date(Number(hour) + 3600000)
-		$scope.new_event.dateS = hour
-		$scope.new_event.timeS = hour
+		// $scope.new_event.dateE = new Date(Number(hour) + 3600000)
+		// $scope.new_event.timeE = new Date(Number(hour) + 3600000)
+		// $scope.new_event.dateS = hour
+		// $scope.new_event.timeS = hour
+		$scope.new_event.start = hour
+		$scope.new_event.end   = new Date(Number(hour) + 3600000)
 		$('#new-event').it(function(element) {
 			element.style.display = 'inline-block'
 		})
 	}
 
 	$scope.create = function() {
-		$scope.new_event.start = $date.combine($scope.new_event.dateS,$scope.new_event.timeS)
-		$scope.new_event.end   = $date.combine($scope.new_event.dateE,$scope.new_event.timeE)
-		$scope.new_event.dateS = undefined
-		$scope.new_event.timeS = undefined
-		$scope.new_event.dateE = undefined
-		$scope.new_event.timeE = undefined
+		// $scope.new_event.start = $date.combine($scope.new_event.dateS,$scope.new_event.timeS)
+		// $scope.new_event.end   = $date.combine($scope.new_event.dateE,$scope.new_event.timeE)
+		// $scope.new_event.dateS = undefined
+		// $scope.new_event.timeS = undefined
+		// $scope.new_event.dateE = undefined
+		// $scope.new_event.timeE = undefined
 		// console.log($scope.new_event)
 		EventFactory.create($scope.new_event,function(created_event) {
 			console.log(created_event)

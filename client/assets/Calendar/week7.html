@@ -21,7 +21,7 @@
 				<div class="midnight"></div>
 				<div class="hour" ng-repeat="hour in hours | limitTo : 23 : 1">{{hour | date : "h:mm a"}}</div>
 			</div><div class="day" ng-repeat="day in days">
-				<div ng-repeat="graphic in day.content()" id="{{graphic.id}}" class="{{graphic.class}}">{{graphic.title}}</div>
+				<div ng-repeat="graphic in day.content()" id="{{graphic.id}}" class="{{graphic.class}}" ng-click="click(graphic)">{{graphic.title}}</div>
 				<!-- <div class="plus" ng-click="new(block)" ng-repeat="block in day.html()">+</div> -->
 			</div>
 		</div>
@@ -38,15 +38,15 @@
 		<tr>
 			<td>Start:</td>
 			<td>
-				<input type="time" ng-model="new_event.timeS">
-				<input type="date" ng-model="new_event.dateS">
+				<input type="time" ng-model="new_event.start">
+				<input type="date" ng-model="new_event.start">
 			</td>
 		</tr>
 		<tr>
 			<td>End:</td>
 			<td>
-				<input type="time" ng-model="new_event.timeE">
-				<input type="date" ng-model="new_event.dateE">
+				<input type="time" ng-model="new_event.end">
+				<input type="date" ng-model="new_event.end">
 			</td>
 		</tr>
 		<tr>
