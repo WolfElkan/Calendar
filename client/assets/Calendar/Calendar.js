@@ -1,5 +1,6 @@
-app.controller('Calendar',['$','$scope','$routeParams','$location','$compile','$date','EventFactory',
-function                  ( $ , $scope , $routeParams , $location , $compile , $date , EventFactory) {
+app.controller('Calendar',
+		['$','$scope','$routeParams','$location','$compile','$date','$find','EventFactory',
+function( $ , $scope , $routeParams , $location , $compile , $date , $find , EventFactory) {
 
 // On Load
 
@@ -81,7 +82,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 
 // Constructors
 
-	function Offset(px) {
+	function Offset(px=0) {
 		this.px = px
 	}
 
@@ -153,7 +154,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			self.event_links = []
 			self.hour_links  = []
 			var h = 0, e = 0
-			var offset = new Offset(0)
+			var offset = new Offset
 			var content = []
 			while (h < hours.length || e < events.length) {
 				var l = content.length
@@ -200,10 +201,12 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 			// console.log(offset.px)
 			self.head = midnight
 			self.add_event = function(event) {
-				var place = binary_search(event,content)
-				for (var i = content.length - 1; i > place; i--) {
-					content[i] = content[i-1]
-				}
+				// content.push(event)
+				// var place = $find.binary(content,Number(event.start),['start',Number])
+				// place = Math.floor(place)
+				// for (var i = content.length - 1; i > place; i--) {
+				// 	content[i] = content[i-1]
+				// }
 			}
 			$scope.days[index] = self
 			if (isLast) {
@@ -241,7 +244,7 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 // Scope Functions
 
 	$scope.click = function(graphic) {
-		if (graphic.__proto__.constructor.name == "PlusBox") {
+		if (graphic.__proto__.constructor == PlusBox) {
 			$scope.new(graphic.hour)
 		}
 	}
@@ -269,6 +272,9 @@ function                  ( $ , $scope , $routeParams , $location , $compile , $
 		// console.log($scope.new_event)
 		EventFactory.create($scope.new_event,function(created_event) {
 			console.log(created_event)
+			var day = $find.binary($scope.days,Number(created_event.start),['events','start',Number])
+			day = $scope.days[day]
+			day.add_event(created_event)
 		})
 		$('#new-event').it(function(element) {
 			element.style.display = 'none'

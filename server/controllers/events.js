@@ -30,6 +30,7 @@ function between(start,end) {
 
 events.by_date = function(request,response) {
 	var start = Number(request.query.date)
+	console.log(new Date(start))
 	var end   = start + 86400000
 	var range = between(new Date(start),new Date(end))
 	// console.log(range)
@@ -37,7 +38,10 @@ events.by_date = function(request,response) {
 		if (error) {
 			console.log(error.stringValue)
 		} else {
-			response.json(found_events)
+			response.json({
+				date   : request.query.date,
+				events : found_events
+			})
 		}
 	})
 }

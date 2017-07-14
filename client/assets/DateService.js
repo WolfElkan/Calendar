@@ -17,14 +17,26 @@ app.service('$date',function() {
 		)
 	}
 
-	service.parse = function(str,tz=0) {
-		var year  = str.substr( 0,4)
-		var month = str.substr( 5,2) - 1
-		var date  = str.substr( 8,2)
-		var hour  = str.substr(11,2)
-		var min   = str.substr(14,2)
-		var sec   = str.substr(17,str.length-18)
-		return new Date(year,month,date,hour,min-tz,sec)
+	service.parse = function(input,tz) {
+		tz = tz ? tz : new Date().getTimezoneOffset()
+		var type = input.__proto__.constructor
+		if (type == Date) {
+			return input
+		} else if (type == Number) {
+			return new Date(input)
+		} else if (type == String) {
+			if (/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d{0,3})?/.exec(input)) {
+				var year  = input.substr( 0,4)
+				var month = input.substr( 5,2) - 1
+				var date  = input.substr( 8,2)
+				var hour  = input.substr(11,2)
+				var min   = input.substr(14,2) - tz
+				var sec   = input.substr(17,input.length-18)
+				return new Date(year,month,date,hour,min,sec)
+			} else if (/^\d+$/.exec(input)) {
+				return new Date(Number(input))
+			}
+		}
 	}
 
 	service.midnight = function(date) {
