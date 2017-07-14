@@ -3,6 +3,8 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 	var factory = {}
 	var content = []
 
+	factory.validations = []
+
 	function Event(data) {
 		this.title = data.title
 		this.color = data.color
@@ -11,12 +13,6 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		this._id   = data._id
 		// this.created_at = $date.parse(data.created_at)
 		// this.updated_at = $date.parse(data.updated_at)
-		// this.Graphic = function(date,offset,scale=1) {
-		// 	scale /= 60000
-		// 	date = $date.midnight(date)
-		// 	var top = (Number(this.start) - Number(date)) * scale - offset.px
-		// 	var height = (this.end - this.start) * scale
-		// }
 	}
 
 	function LoadedDate(data) {
@@ -25,45 +21,6 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		this.asof   = new Date
 	}
 
-	// factory.get = function(callback) {
-	// 	if (typeof(callback) == 'function') {
-	// 		if (content[0]) {
-	// 			return callback(content)
-	// 		} else {
-	// 			$http.get('/events').then(function(returned) {
-	// 				for (var i = 0; i < returned.data.events.length; i++) {
-	// 					content.push(new Event(returned.data.events[i]))
-	// 				}
-	// 				return callback(content)
-	// 			})
-	// 		}
-	// 	} else if (!callback) {
-	// 		if (!content[0]) {
-	// 			var promise = $http.get('/events')
-	// 			promise.then(function(returned) {
-	// 				content = returned.data.events
-	// 			})
-	// 			return promise
-	// 		}
-	// 	} else {
-	// 		throw new TypeError('Expected Function, got',callback.__proto__.constructor.name)
-	// 	}
-	// }
-
-	// factory.get_by_date = function(date,callback) {
-	// 	var event1 = new Event({
-	// 		'title' : 'Test',
-	// 		'color' : '#c0ffee',
-	// 		'start' : '2017-07-07T14:00:00.000',
-	// 		'end'   : '2017-07-07T15:30:00.000',
-	// 	})
-	// 	if (Number($date.midnight(date)) == Number($date.midnight(event1.start))) {
-	// 		return callback([event1])
-	// 	} else {
-	// 		return callback([])
-	// 	}
-	// }
-
 	factory.get_by_date = function(date,callback) {
 		var ldi = $find.index(content,date,'date')
 		if (ldi + 1) {
@@ -71,7 +28,6 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 		} else {
 			$http.get('/events',{params:{date:Number(date)}}).then(function(returned) {
 				var new_loaded_date = new LoadedDate(returned.data)
-				console.log(new_loaded_date)
 				content.push(new_loaded_date)
 				callback(new_loaded_date.events)
 				// for (var i = 0; i < returned.data.length; i++) {
@@ -81,8 +37,6 @@ app.factory('EventFactory',['$http','$find','$valid','$date',function($http,$fin
 			})
 		}
 	}
-
-	factory.validations = []
 
 	factory.create = function(new_event,callback) {
 		var obj = $valid.ate(factory,new_event)

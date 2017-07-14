@@ -2,88 +2,42 @@ app.controller('Calendar',
 		['$','$scope','$routeParams','$location','$compile','$date','$find','EventFactory',
 function( $ , $scope , $routeParams , $location , $compile , $date , $find , EventFactory) {
 
-// On Load
-
-	// Navigation
-
-		if (!$routeParams.year) {
-			var now = new Date()
-			now -= now.getDay() * 86400000
-			go(now)
-		}
-
+	if (!$routeParams.year) {
+		var now = new Date()
+		now -= now.getDay() * 86400000
+		go(now)
+	} else {
 		var start = new Date($routeParams.year,$routeParams.month,$routeParams.date)
-
-		if (Number(start) && (
-			$routeParams.date  != start.getDate()  ||
-			$routeParams.month != start.getMonth() ||
-			$routeParams.year  != start.getFullYear() ) ) {
-			go(start)
+		if (Number(start)) {
+			if (
+				$routeParams.date  != start.getDate()  ||
+				$routeParams.month != start.getMonth() ||
+				$routeParams.year  != start.getFullYear() 
+			) {
+				go(start)
+			} else {
+				$scope.nDays = 7
+				page_setup($scope)
+				populate($scope)
+			}
 		}
+	}
 
-	// Content
+	function go(date) {
+		date = new Date(date)
+		var url = 'calendar?view=week'
+		url += '&year=' + date.getFullYear()
+		url += '&month='+ date.getMonth()
+		url += '&date=' + date.getDate()
+		$location.url(url)
+	}
 
-		$scope.hours = []
-		for (var h = 0; h < 24; h++) {
-			$scope.hours.push($date.move(start,0,0,0,h))
-		}
-
-		$scope.new_event = {
-			'title' : '',
-			'color' : '#facade',
-		}
-
-		$('#calendar-scroll').it(function(element) {
-			element.scrollTop = 530 // 8:50 AM to 5:10 PM
-		})
-
-		$('#new-event').it(function(element) {
-			element.style.display = 'none'
-		})
-
-	// Events
-
-		// console.log(start)
-
-		var nDays = 7
-		$scope.nDays = nDays
-		$scope.days = [
-			new BlankDay,
-			new BlankDay,
-			new BlankDay,
-			new BlankDay,
-			new BlankDay,
-			new BlankDay,
-			new BlankDay
-		]
-		
-		for (var d = 0; d < nDays; d++) {
-			new Day(start,d,(d == nDays-1),function() {
-				console.log($scope.days)
-			})
-		}
-			// var date = $date.move($date.midnight(start),0,0,d)
-			// EventFactory.get_by_date(date,d,function(events,index) {
-			// 	console.log(index,date,events)
-			// 	$scope.days.push(new Day(date,index,events))
-			// 	if (d == nDays-1) {
-			// 		console.log($scope.days)
-			// 		$scope.cross = function(option) {
-			// 			if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
-			// 				return option == 0
-			// 			} else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
-			// 				return option == 1
-			// 			} else {
-			// 				return option == 2
-			// 			}
-			// 		}
-			// 	}
-			// })
-
-// Constructors
+	// Constructors
 
 	function Offset(px=0) {
 		this.px = px
+		// Adding more lines so I can collapse it
+		// I know, so professional
 	}
 
 	function Hour(time) {
@@ -93,21 +47,9 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 		plus_id += time.getHours() < 10 ? '0' : ''
 		plus_id += time.getHours()
 		this.plus_id = plus_id
-
-		// this.div = function(date,offset,scale=1) {
-		// 	var height = 60 * scale
-		// 	scale /= 60000
-		// 	date = $date.midnight(date)
-		// 	var top = (Number(this.time) - Number(date)) * scale - offset.px
-		// 	// console.log()
-		// 	offset.px += height
-		// 	return '<div plus time="12345">Hello</div>'
-		// 	// return `<div plus top="${top}" height="${height}" time="${Number(this.time)}"></div>`
-		// }
 	}
 
 	function PlusBox(date,hour,offset,scale=1) {
-		// console.log(arguments)
 		this.height = 60 * scale
 		scale /= 60000
 		date = $date.midnight(date)
@@ -116,7 +58,6 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 		this.class = "plus"
 		this.title = "+"
 		this.color = null
-		// console.log(date)
 		this.id    = hour.plus_id
 		this.hour  = hour
 	}
@@ -139,18 +80,15 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 	}
 
 	function Day(initial,index,isLast,callback) {
-		var midnight = $date.midnight($date.move(initial,0,0,index))
 		var self = this
+		var midnight = $date.midnight($date.move(initial,0,0,index))
 		EventFactory.get_by_date(midnight,function(events) {
-			// console.log(midnight,events)
 			self.events = events
-
 			var hours = []
 			for (var h = 0; h < $scope.hours.length; h++) {
 				hours.push(new Hour($date.combine(midnight,$scope.hours[h])))
 			}
 			self.hours = hours
-
 			self.event_links = []
 			self.hour_links  = []
 			var h = 0, e = 0
@@ -168,17 +106,9 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 					e++
 				}
 			}
-			console.log(index, self.event_links)
 			self.content = function() {
-				// console.log(135)
 				$('.day').index(index,function(day_element) {
 					setTimeout(function() {
-						// $('.plus',day_element).every(function(element,h) {
-						// 	// console.log(element)
-						// })
-						// $('.event',day_element).every(function(element,e) {
-						// 	console.log(self.event_links[e])
-						// })
 						for (var h = 0; h < self.hours.length; h++) {
 							$('#' + self.hour_links[h].id).it(function(element) {
 								element.style.top    = self.hour_links[h].top     + 'px'
@@ -187,8 +117,6 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 						}
 						for (var e = 0; e < self.events.length; e++) {
 							$('#' + self.event_links[e].id).it(function(element) {
-								// console.log(self.events[e],element)
-								// element.style.fontWeight = 'bold'
 								element.style.top    = self.event_links[e].top    + 'px'
 								element.style.height = self.event_links[e].height + 'px'
 								element.style.backgroundColor = events[e].color
@@ -198,7 +126,6 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 				})
 				return content
 			}
-			// console.log(offset.px)
 			self.head = midnight
 			self.add_event = function(event) {
 				// content.push(event)
@@ -215,116 +142,115 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 		})
 	}
 
-// Support Functions
+	// Action Functions
 
-	function go(date) {
-		date = new Date(date)
-		var url = 'calendar?view=week'
-		url += '&year=' + date.getFullYear()
-		url += '&month='+ date.getMonth()
-		url += '&date=' + date.getDate()
-		$location.url(url)
-	}
+	function page_setup($scope) {
 
-	// function display(day,events) {
-	// 	var str = ''
-	// 	var off = 0
-	// 	for (var i = 0; i < events.length; i++) {
-	// 		var event = new EventGraphic(events[i],off)
-	// 		str += event.str
-	// 		off = event.off
-	// 	}
-	// 	var html = str
-	// 	html += day.innerHTML
-	// 	day.innerHTML = html
-	// 	// console.log(off/60)
-	// 	day.$('.plus').bottom(off)
-	// }
-
-// Scope Functions
-
-	$scope.click = function(graphic) {
-		if (graphic.__proto__.constructor == PlusBox) {
-			$scope.new(graphic.hour)
-		}
-	}
-
-	$scope.new = function(hour) {
-		hour = hour.time
-		// $scope.new_event.dateE = new Date(Number(hour) + 3600000)
-		// $scope.new_event.timeE = new Date(Number(hour) + 3600000)
-		// $scope.new_event.dateS = hour
-		// $scope.new_event.timeS = hour
-		$scope.new_event.start = hour
-		$scope.new_event.end   = new Date(Number(hour) + 3600000)
-		$('#new-event').it(function(element) {
-			element.style.display = 'inline-block'
-		})
-	}
-
-	$scope.create = function() {
-		// $scope.new_event.start = $date.combine($scope.new_event.dateS,$scope.new_event.timeS)
-		// $scope.new_event.end   = $date.combine($scope.new_event.dateE,$scope.new_event.timeE)
-		// $scope.new_event.dateS = undefined
-		// $scope.new_event.timeS = undefined
-		// $scope.new_event.dateE = undefined
-		// $scope.new_event.timeE = undefined
-		// console.log($scope.new_event)
-		EventFactory.create($scope.new_event,function(created_event) {
-			console.log(created_event)
-			var day = $find.binary($scope.days,Number(created_event.start),['events','start',Number])
-			day = $scope.days[day]
-			day.add_event(created_event)
-		})
-		$('#new-event').it(function(element) {
-			element.style.display = 'none'
-		})
 		$scope.new_event = {
 			'title' : '',
-			'color' : '#ffffff',
+			'color' : '#facade',
 		}
-	}
 
-	$scope.cancel = function() {
-		$('#new-event').it(function(element) {
-			element.style.display = 'none'
+		$('#calendar-scroll').it(function(element) {
+			element.scrollTop = 530 // 8:50 AM to 5:10 PM
 		})
 	}
 
-	$scope.isToday = function(day) {
-		return Number($date.midnight(day.head)) == Number($date.midnight(new Date()))
+	function populate($scope) {
+
+		$scope.hours = []
+		
+		for (var h = 0; h < 24; h++) {
+			$scope.hours.push($date.move(start,0,0,0,h))
+		}
+
+		var nDays = $scope.nDays
+
+		$scope.days = []
+		
+		for (var d = 0; d < nDays; d++) {
+			$scope.days.push(new BlankDay)
+		}
+
+		for (var d = 0; d < nDays; d++) {
+			new Day(start,d,(d == nDays-1),function() {
+				add_scope_methods($scope)
+			})
+		}
 	}
 
-	$scope.delete = function(id) {
-		EventFactory.delete(id)
+	function add_scope_methods($scope) {
+
+		$scope.click = function(graphic) {
+			if (graphic.__proto__.constructor == PlusBox) {
+				$scope.new(graphic.hour)
+			}
+		}
+
+		$scope.new = function(hour) {
+			hour = hour.time
+			$scope.new_event.start = hour
+			$scope.new_event.end   = new Date(Number(hour) + 3600000)
+			$('#new-event').it(function(element) {
+				element.style.display = 'inline-block'
+			})
+		}
+
+		$scope.create = function() {
+			EventFactory.create($scope.new_event,function(created_event) {
+				console.log(created_event)
+				var day = $find.binary($scope.days,Number(created_event.start),['events','start',Number])
+				day = $scope.days[day]
+				day.add_event(created_event)
+			})
+			$('#new-event').it(function(element) {
+				element.style.display = 'none'
+			})
+			$scope.new_event = {
+				'title' : '',
+				'color' : '#ffffff',
+			}
+		}
+
+		$scope.cancel = function() {
+			$('#new-event').it(function(element) {
+				element.style.display = 'none'
+			})
+		}
+
+		$scope.isToday = function(day) {
+			return Number($date.midnight(day.head)) == Number($date.midnight(new Date()))
+		}
+
+		$scope.delete = function(id) {
+			EventFactory.delete(id)
+		}
+
+		$scope.nav = function(dDays) {
+			go($date.move(start,0,0,dDays))
+		}
+
+		$scope.cross = function(option) {
+			var lDay = $scope.nDays - 1
+			if ($scope.days[0].head.getMonth() == $scope.days[lDay].head.getMonth()) {
+				return option == 0
+			} else if ($scope.days[0].head.getYear() == $scope.days[lDay].head.getYear()) {
+				return option == 1
+			} else {
+				return option == 2
+			}
+		}
+
+		$scope.range = function(lo,hi,inc=1) {
+			var result = []
+			for (var i = lo; i <= hi; i+=inc) {
+				result.push(i)
+			}
+			return result
+		}
 	}
 
-	$scope.nav = function(dDays) {
-		go($date.move(start,0,0,dDays))
-	}
-
-	$scope.cross = function(option) {
-		// if ($scope.days[0].head.getMonth() == $scope.days[nDays-1].head.getMonth()) {
-		// 	return option == 0
-		// } else if ($scope.days[0].head.getYear() == $scope.days[nDays-1].head.getYear()) {
-		// 	return option == 1
-		// } else {
-		// 	return option == 2
-		// }
-		return option == 0
-	}
-
-	$scope.print = function() {
-		// console.log('load')
-		// var x = $('.day')
-		// console.log(x)
-
-		EventFactory.print()
-
-
-	}
-
-// Development Functions
+	// Utilities
 
 	function print(obj) {
 		for (key in obj) {
@@ -332,12 +258,8 @@ function( $ , $scope , $routeParams , $location , $compile , $date , $find , Eve
 		}
 	}
 
-	$scope.range = function(lo,hi,inc=1) {
-		var result = []
-		for (var i = lo; i <= hi; i+=inc) {
-			result.push(i)
-		}
-		return result
-	}
+	// $scope.print = function() {
+	// 	EventFactory.print()
+	// }
 
 }])
